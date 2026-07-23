@@ -1,0 +1,1592 @@
+swagger: '2.0'
+info:
+  description: This page is the reference of the Bacalhau REST API. Project docs are available at https://docs.bacalhau.org/. Find more information about Bacalhau at https://github.com/bacalhau-project/bacalhau.
+  title: Bacalhau Ops Orchestrator API
+  contact:
+    name: Bacalhau Team
+    url: https://github.com/bacalhau-project/bacalhau
+    email: team@bacalhau.org
+  license:
+    name: Apache 2.0
+    url: https://github.com/bacalhau-project/bacalhau/blob/main/LICENSE
+host: localhost:1234
+basePath: /
+schemes:
+- http
+tags:
+- name: Orchestrator
+paths:
+  /api/v1/orchestrator/jobs:
+    get:
+      description: Returns a list of jobs.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - Orchestrator
+      summary: Returns a list of jobs.
+      operationId: orchestrator/listJobs
+      parameters:
+      - type: string
+        description: Namespace to get the jobs for
+        name: namespace
+        in: query
+      - type: integer
+        description: Limit the number of jobs returned
+        name: limit
+        in: query
+      - type: string
+        description: Token to get the next page of jobs
+        name: next_token
+        in: query
+      - type: boolean
+        description: Reverse the order of the jobs
+        name: reverse
+        in: query
+      - type: string
+        description: Order the jobs by the given field
+        name: order_by
+        in: query
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/apimodels.ListJobsResponse'
+        '400':
+          description: Bad Request
+          schema:
+            type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: string
+    put:
+      description: Submits a job to the orchestrator.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - Orchestrator
+      summary: Submits a job to the orchestrator.
+      operationId: orchestrator/putJob
+      parameters:
+      - description: Job to submit
+        name: putJobRequest
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/apimodels.PutJobRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/apimodels.PutJobResponse'
+        '400':
+          description: Bad Request
+          schema:
+            type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: string
+  /api/v1/orchestrator/jobs/diff:
+    put:
+      description: Compares a submitted job spec with the existing job that has the same name, and returns the differences between them.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - Orchestrator
+      summary: Compares a job spec with an existing job of the same name.
+      operationId: orchestrator/diffJob
+      parameters:
+      - description: Job spec to compare with existing job
+        name: diffJobRequest
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/apimodels.DiffJobRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/apimodels.DiffJobResponse'
+        '400':
+          description: Bad Request
+          schema:
+            type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: string
+  /api/v1/orchestrator/jobs/{id}:
+    get:
+      description: Returns a job.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - Orchestrator
+      summary: Returns a job.
+      operationId: orchestrator/getJob
+      parameters:
+      - type: string
+        description: ID to get the job for
+        name: id
+        in: path
+        required: true
+      - type: string
+        description: history and executions options. Empty includes nothing
+        name: include
+        in: query
+      - type: integer
+        description: Number of items to fetch. Use with include parameter
+        name: limit
+        in: query
+      - type: integer
+        description: Job version to get. Defaults to 0.
+        name: job_version
+        in: query
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/apimodels.GetJobResponse'
+        '400':
+          description: Bad Request
+          schema:
+            type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: string
+    delete:
+      description: Stops a job.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - Orchestrator
+      summary: Stops a job.
+      operationId: orchestrator/stopJob
+      parameters:
+      - type: string
+        description: ID to stop the job for
+        name: id
+        in: path
+        required: true
+      - type: string
+        description: Reason for stopping the job
+        name: reason
+        in: query
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/apimodels.StopJobResponse'
+        '400':
+          description: Bad Request
+          schema:
+            type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: string
+  /api/v1/orchestrator/jobs/{id}/executions:
+    get:
+      description: Returns the executions of a job.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - Orchestrator
+      summary: Returns the executions of a job.
+      operationId: orchestrator/jobExecutions
+      parameters:
+      - type: string
+        description: ID to get the job executions for
+        name: id
+        in: path
+        required: true
+      - type: string
+        description: Namespace to get the jobs for
+        name: namespace
+        in: query
+      - type: integer
+        description: Limit the number of executions returned
+        name: limit
+        in: query
+      - type: string
+        description: Token to get the next page of executions
+        name: next_token
+        in: query
+      - type: boolean
+        description: Reverse the order of the executions
+        name: reverse
+        in: query
+      - type: string
+        description: Order the executions by the given field
+        name: order_by
+        in: query
+        required: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/apimodels.ListJobExecutionsResponse'
+        '400':
+          description: Bad Request
+          schema:
+            type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: string
+  /api/v1/orchestrator/jobs/{id}/history:
+    get:
+      description: Returns the history of a job.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - Orchestrator
+      summary: Returns the history of a job.
+      operationId: orchestrator/listHistory
+      parameters:
+      - type: string
+        description: ID to get the job history for
+        name: id
+        in: path
+        required: true
+      - type: integer
+        description: Limit the number of history events returned
+        name: limit
+        in: query
+      - type: string
+        description: Only return history since this time
+        name: since
+        in: query
+      - type: string
+        description: Only return history of this event type
+        name: event_type
+        in: query
+      - type: string
+        description: Only return history of this execution ID
+        name: execution_id
+        in: query
+      - type: string
+        description: Token to get the next page of the history events
+        name: next_token
+        in: query
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/apimodels.ListJobHistoryResponse'
+        '400':
+          description: Bad Request
+          schema:
+            type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: string
+  /api/v1/orchestrator/jobs/{id}/logs:
+    get:
+      description: 'Establishes a WebSocket connection to stream output from the job specified by `id`
+
+        The stream will continue until either the client disconnects or the execution completes'
+      consumes:
+      - application/json
+      produces:
+      - application/octet-stream
+      tags:
+      - Orchestrator
+      summary: Streams the logs for a current job/execution via WebSocket
+      operationId: orchestrator/logs
+      parameters:
+      - type: string
+        description: ID of the job to stream logs for
+        name: id
+        in: path
+        required: true
+      - type: string
+        description: Fetch logs for a specific execution
+        name: execution_id
+        in: query
+      - type: boolean
+        description: Fetch historical logs
+        name: tail
+        in: query
+      - type: boolean
+        description: Follow the logs
+        name: follow
+        in: query
+      responses:
+        '101':
+          description: Switching Protocols to WebSocket
+          schema:
+            $ref: '#/definitions/models.ExecutionLog'
+        '400':
+          description: Bad Request
+          schema:
+            type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: string
+  /api/v1/orchestrator/jobs/{id}/rerun:
+    put:
+      description: Reruns a job with the specified job ID or name.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - Orchestrator
+      summary: Reruns a job.
+      operationId: orchestrator/rerunJob
+      parameters:
+      - type: string
+        description: ID or name of the job to rerun
+        name: id
+        in: path
+        required: true
+      - description: Request to rerun job
+        name: rerunJobRequest
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/apimodels.RerunJobRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/apimodels.RerunJobResponse'
+        '400':
+          description: Bad Request
+          schema:
+            type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: string
+  /api/v1/orchestrator/jobs/{id}/results:
+    get:
+      description: Returns the results of a job.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - Orchestrator
+      summary: Returns the results of a job.
+      operationId: orchestrator/jobResults
+      parameters:
+      - type: string
+        description: ID to get the job results for
+        name: id
+        in: path
+        required: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/apimodels.ListJobResultsResponse'
+        '400':
+          description: Bad Request
+          schema:
+            type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: string
+  /api/v1/orchestrator/jobs/{id}/versions:
+    get:
+      description: Returns the versions of a job.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - Orchestrator
+      summary: Returns the versions of a job.
+      operationId: orchestrator/jobVersions
+      parameters:
+      - type: string
+        description: ID or Name to get the job versions for
+        name: id
+        in: path
+        required: true
+      - type: string
+        description: Namespace of the job
+        name: namespace
+        in: query
+      - type: integer
+        description: Limit the number of job versions returned
+        name: limit
+        in: query
+      - type: string
+        description: Token to get the next page of job versions
+        name: next_token
+        in: query
+      - type: boolean
+        description: Reverse the order of the job versions
+        name: reverse
+        in: query
+      - type: string
+        description: Order the job versions by the given field
+        name: order_by
+        in: query
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/apimodels.ListJobVersionsResponse'
+        '400':
+          description: Bad Request
+          schema:
+            type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: string
+  /api/v1/orchestrator/nodes:
+    get:
+      description: Returns a list of orchestrator nodes.
+      produces:
+      - application/json
+      tags:
+      - Orchestrator
+      summary: Returns a list of orchestrator nodes.
+      operationId: orchestrator/listNodes
+      parameters:
+      - type: integer
+        description: Limit the number of node returned
+        name: limit
+        in: query
+      - type: string
+        description: Token to get the next page of nodes
+        name: next_token
+        in: query
+      - type: boolean
+        description: Reverse the order of the nodes
+        name: reverse
+        in: query
+      - type: string
+        description: Order the nodes by given field
+        name: order_by
+        in: query
+      - type: string
+        description: Filter Approval
+        name: filter_approval
+        in: query
+      - type: string
+        description: Filter Status
+        name: filter-status
+        in: query
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/apimodels.ListNodesResponse'
+        '400':
+          description: Bad Request
+          schema:
+            type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: string
+  /api/v1/orchestrator/nodes/{id}:
+    get:
+      description: Get an orchestrator node
+      produces:
+      - application/json
+      tags:
+      - Orchestrator
+      summary: Get an orchestrator node
+      operationId: orchestrator/getNode
+      parameters:
+      - type: string
+        description: ID of the orchestrator node to fetch for.
+        name: id
+        in: path
+        required: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/apimodels.GetNodeResponse'
+        '400':
+          description: Bad Request
+          schema:
+            type: string
+        '404':
+          description: Not Found
+          schema:
+            type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: string
+    put:
+      description: Update an orchestrator node.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - Orchestrator
+      summary: Update an orchestrator node.
+      operationId: orchestrator/updateNode
+      parameters:
+      - type: string
+        description: ID of the orchestrator node.
+        name: id
+        in: path
+        required: true
+      - description: Put Node Request
+        name: putNodeRequest
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/apimodels.PutNodeRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/apimodels.PutNodeResponse'
+        '400':
+          description: Bad Request
+          schema:
+            type: string
+        '404':
+          description: Not Found
+          schema:
+            type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: string
+definitions:
+  apimodels.PutNodeResponse:
+    type: object
+    properties:
+      Error:
+        type: string
+      Success:
+        type: boolean
+  models.ConnectionState:
+    type: object
+    properties:
+      ConnectedSince:
+        description: Connection tracking
+        type: string
+      DisconnectedSince:
+        type: string
+      LastComputeSeqNum:
+        description: Message sequencing for reliable delivery
+        type: integer
+      LastError:
+        type: string
+      LastHeartbeat:
+        description: Last successful heartbeat timestamp
+        type: string
+      LastOrchestratorSeqNum:
+        description: Last seq received from orchestrator
+        type: integer
+      Status:
+        description: Connection status
+        allOf:
+        - $ref: '#/definitions/models.NodeConnectionState'
+  models.ResultPath:
+    type: object
+    properties:
+      Name:
+        description: Name
+        type: string
+      Path:
+        description: The path to the file/dir
+        type: string
+  apimodels.GetJobResponse:
+    type: object
+    properties:
+      Executions:
+        $ref: '#/definitions/apimodels.ListJobExecutionsResponse'
+      History:
+        $ref: '#/definitions/apimodels.ListJobHistoryResponse'
+      Job:
+        $ref: '#/definitions/models.Job'
+  models.JobStateType:
+    type: integer
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    x-enum-varnames:
+    - JobStateTypeUndefined
+    - JobStateTypePending
+    - JobStateTypeQueued
+    - JobStateTypeRunning
+    - JobStateTypeCompleted
+    - JobStateTypeFailed
+    - JobStateTypeStopped
+  models.ExecutionStateType:
+    type: integer
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    - 11
+    x-enum-comments:
+      ExecutionStateBidAccepted: aka running
+    x-enum-descriptions:
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - aka running
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    x-enum-varnames:
+    - ExecutionStateUndefined
+    - ExecutionStateNew
+    - ExecutionStateAskForBid
+    - ExecutionStateAskForBidAccepted
+    - ExecutionStateAskForBidRejected
+    - ExecutionStateBidAccepted
+    - ExecutionStateRunning
+    - ExecutionStatePublishing
+    - ExecutionStateBidRejected
+    - ExecutionStateCompleted
+    - ExecutionStateFailed
+    - ExecutionStateCancelled
+  apimodels.ListJobResultsResponse:
+    type: object
+    properties:
+      Items:
+        type: array
+        items:
+          $ref: '#/definitions/models.SpecConfig'
+      NextToken:
+        type: string
+  models.NodeType:
+    type: integer
+    enum:
+    - 0
+    - 1
+    - 2
+    x-enum-varnames:
+    - nodeTypeUndefined
+    - NodeTypeRequester
+    - NodeTypeCompute
+  apimodels.ListNodesResponse:
+    type: object
+    properties:
+      NextToken:
+        type: string
+      Nodes:
+        type: array
+        items:
+          $ref: '#/definitions/models.NodeState'
+  models.StateChange-models_JobStateType:
+    type: object
+    properties:
+      New:
+        $ref: '#/definitions/models.JobStateType'
+      Previous:
+        $ref: '#/definitions/models.JobStateType'
+  models.ExecutionDesiredStateType:
+    type: integer
+    enum:
+    - 0
+    - 1
+    - 2
+    x-enum-varnames:
+    - ExecutionDesiredStatePending
+    - ExecutionDesiredStateRunning
+    - ExecutionDesiredStateStopped
+  models.Protocol:
+    type: string
+    enum:
+    - ncl/v1
+    - bprotocol/v2
+    x-enum-varnames:
+    - ProtocolNCLV1
+    - ProtocolBProtocolV2
+  models.ComputeNodeInfo:
+    type: object
+    properties:
+      AvailableCapacity:
+        $ref: '#/definitions/models.Resources'
+      EnqueuedExecutions:
+        type: integer
+      ExecutionEngines:
+        type: array
+        items:
+          type: string
+      MaxCapacity:
+        $ref: '#/definitions/models.Resources'
+      MaxJobRequirements:
+        $ref: '#/definitions/models.Resources'
+      Publishers:
+        type: array
+        items:
+          type: string
+      QueueCapacity:
+        $ref: '#/definitions/models.Resources'
+      RunningExecutions:
+        type: integer
+      StorageSources:
+        type: array
+        items:
+          type: string
+      address:
+        description: 'Address is the network location where this compute node can be reached
+
+          Format: IPv4 or hostname (e.g., "192.168.1.100" or "node1.example.com")'
+        type: string
+  models.AllocatedResources:
+    type: object
+    properties:
+      Tasks:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/models.Resources'
+  models.JobHistoryType:
+    type: integer
+    enum:
+    - 0
+    - 1
+    - 2
+    x-enum-varnames:
+    - JobHistoryTypeUndefined
+    - JobHistoryTypeJobLevel
+    - JobHistoryTypeExecutionLevel
+  apimodels.ListJobExecutionsResponse:
+    type: object
+    properties:
+      Items:
+        type: array
+        items:
+          $ref: '#/definitions/models.Execution'
+      NextToken:
+        type: string
+  models.Network:
+    type: integer
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    x-enum-varnames:
+    - NetworkDefault
+    - NetworkNone
+    - NetworkHost
+    - NetworkFull
+    - NetworkHTTP
+    - NetworkBridge
+  models.RunCommandResult:
+    type: object
+    properties:
+      ErrorMsg:
+        description: Runner error
+        type: string
+      ExitCode:
+        description: exit code of the run.
+        type: integer
+      StderrTruncated:
+        description: bool describing if stderr was truncated
+        type: boolean
+      Stdout:
+        description: stdout of the run. Yaml provided for `describe` output
+        type: string
+      StdoutTruncated:
+        description: bool describing if stdout was truncated
+        type: boolean
+      stderr:
+        description: stderr of the run.
+        type: string
+  apimodels.PutJobResponse:
+    type: object
+    properties:
+      EvaluationID:
+        type: string
+      JobID:
+        type: string
+      Warnings:
+        type: array
+        items:
+          type: string
+  apimodels.RerunJobRequest:
+    type: object
+    properties:
+      JobVersion:
+        type: integer
+      Reason:
+        type: string
+      credential:
+        $ref: '#/definitions/apimodels.HTTPCredential'
+      idempotencyToken:
+        type: string
+      namespace:
+        type: string
+  selection.Operator:
+    type: string
+    enum:
+    - '!'
+    - '='
+    - ==
+    - in
+    - '!='
+    - notin
+    - exists
+    - gt
+    - lt
+    x-enum-varnames:
+    - DoesNotExist
+    - Equals
+    - DoubleEquals
+    - In
+    - NotEquals
+    - NotIn
+    - Exists
+    - GreaterThan
+    - LessThan
+  models.NodeConnectionState:
+    type: object
+    properties:
+      connection:
+        type: integer
+        enum:
+        - 0
+        - 1
+        x-enum-varnames:
+        - connected
+        - disconnected
+  models.Event:
+    type: object
+    properties:
+      Details:
+        description: 'Any additional metadata that the system or user may need to know about
+
+          the event in order to handle it properly.'
+        type: object
+        additionalProperties:
+          type: string
+      Message:
+        description: 'A human-readable string giving the user all the information they need to
+
+          understand and respond to an Event, if a response is required.'
+        type: string
+      Timestamp:
+        description: 'The moment the event occurred, which may be different to the moment it
+
+          was recorded.'
+        type: string
+      Topic:
+        description: The topic of the event. See the documentation on EventTopic.
+        type: string
+  apimodels.ListJobVersionsResponse:
+    type: object
+    properties:
+      Items:
+        type: array
+        items:
+          $ref: '#/definitions/models.Job'
+      NextToken:
+        type: string
+  models.NodeMembershipState:
+    type: object
+    properties:
+      membership:
+        type: integer
+        enum:
+        - 0
+        - 1
+        - 2
+        - 3
+        x-enum-varnames:
+        - unknown
+        - pending
+        - approved
+        - rejected
+  models.StateChange-models_ExecutionStateType:
+    type: object
+    properties:
+      New:
+        $ref: '#/definitions/models.ExecutionStateType'
+      Previous:
+        $ref: '#/definitions/models.ExecutionStateType'
+  apimodels.ListJobsResponse:
+    type: object
+    properties:
+      Items:
+        type: array
+        items:
+          $ref: '#/definitions/models.Job'
+      NextToken:
+        type: string
+  models.ResourcesConfig:
+    type: object
+    properties:
+      CPU:
+        description: CPU https://github.com/BTBurke/k8sresource string
+        type: string
+      Disk:
+        description: Memory github.com/dustin/go-humanize string
+        type: string
+      GPU:
+        type: string
+      Memory:
+        description: Memory github.com/dustin/go-humanize string
+        type: string
+  models.LabelSelectorRequirement:
+    type: object
+    properties:
+      Key:
+        description: key is the label key that the selector applies to.
+        type: string
+      Operator:
+        description: 'operator represents a key''s relationship to a set of values.
+
+          Valid operators are In, NotIn, Exists and KeyNotInImap.'
+        allOf:
+        - $ref: '#/definitions/selection.Operator'
+      Values:
+        description: 'values is an array of string values. If the operator is In or NotIn,
+
+          the values array must be non-empty. If the operator is Exists or KeyNotInImap,
+
+          the values array must be empty. This array is replaced during a strategic'
+        type: array
+        items:
+          type: string
+  apimodels.PutNodeRequest:
+    type: object
+    properties:
+      Action:
+        type: string
+      Message:
+        type: string
+      NodeID:
+        type: string
+      credential:
+        $ref: '#/definitions/apimodels.HTTPCredential'
+      idempotencyToken:
+        type: string
+      namespace:
+        type: string
+  models.Task:
+    type: object
+    properties:
+      Engine:
+        $ref: '#/definitions/models.SpecConfig'
+      Env:
+        description: 'Map of environment variables to be used by the driver.
+
+          Values can be:
+
+          - Direct value: "debug-mode"
+
+          - Host env var: "env:HOST_VAR"'
+        type: object
+        additionalProperties:
+          type: string
+      InputSources:
+        description: 'InputSources is a list of remote artifacts to be downloaded before running the task
+
+          and mounted into the task.'
+        type: array
+        items:
+          $ref: '#/definitions/models.InputSource'
+      Meta:
+        description: Meta is used to associate arbitrary metadata with this task.
+        type: object
+        additionalProperties:
+          type: string
+      Name:
+        description: Name of the task
+        type: string
+      Network:
+        $ref: '#/definitions/models.NetworkConfig'
+      Publisher:
+        $ref: '#/definitions/models.SpecConfig'
+      Resources:
+        description: ResourcesConfig is the resources needed by this task
+        allOf:
+        - $ref: '#/definitions/models.ResourcesConfig'
+      ResultPaths:
+        description: ResultPaths is a list of task volumes to be included in the task's published result
+        type: array
+        items:
+          $ref: '#/definitions/models.ResultPath'
+      Timeouts:
+        $ref: '#/definitions/models.TimeoutConfig'
+  models.SpecConfig:
+    type: object
+    properties:
+      Params:
+        description: Params is a map of the config params
+        type: object
+        additionalProperties: true
+      Type:
+        description: Type of the config
+        type: string
+  models.Resources:
+    type: object
+    properties:
+      CPU:
+        description: CPU units
+        type: number
+      Disk:
+        description: Disk in bytes
+        type: integer
+      GPU:
+        description: GPU units
+        type: integer
+      GPUs:
+        description: GPU details
+        type: array
+        items:
+          $ref: '#/definitions/models.GPU'
+      Memory:
+        description: Memory in bytes
+        type: integer
+  models.GPU:
+    type: object
+    properties:
+      index:
+        description: Self-reported index of the device in the system
+        type: integer
+        format: int64
+      memory:
+        description: Total GPU memory in mebibytes (MiB)
+        type: integer
+        format: int64
+      name:
+        description: Model name of the GPU e.g. Tesla T4
+        type: string
+      pciaddress:
+        description: 'PCI address of the device, in the format AAAA:BB:CC.C
+
+          Used to discover the correct device rendering cards'
+        type: string
+      vendor:
+        description: Maker of the GPU, e.g. NVidia, AMD, Intel
+        allOf:
+        - $ref: '#/definitions/models.GPUVendor'
+  apimodels.HTTPCredential:
+    type: object
+    properties:
+      params:
+        description: 'For authorization schemes that provide multiple values, a map of names to
+
+          values providing the credential'
+        type: object
+        additionalProperties:
+          type: string
+      scheme:
+        description: 'An HTTP authorization scheme, such as one registered with IANA
+
+          https://www.iana.org/assignments/http-authschemes/http-authschemes.xhtml'
+        type: string
+      value:
+        description: 'For authorization schemes that only provide a single value, such as
+
+          Basic, the single string value providing the credential'
+        type: string
+  apimodels.StopJobResponse:
+    type: object
+    properties:
+      EvaluationID:
+        type: string
+  models.ExecutionLog:
+    type: object
+    properties:
+      line:
+        type: string
+      type:
+        $ref: '#/definitions/models.ExecutionLogType'
+  models.GPUVendor:
+    type: string
+    enum:
+    - NVIDIA
+    - AMD/ATI
+    - Intel
+    x-enum-varnames:
+    - GPUVendorNvidia
+    - GPUVendorAMDATI
+    - GPUVendorIntel
+  models.JobHistory:
+    type: object
+    properties:
+      Event:
+        $ref: '#/definitions/models.Event'
+      ExecutionID:
+        type: string
+      ExecutionState:
+        description: 'Deprecated: Left for backward compatibility with v1.4.x clients'
+        allOf:
+        - $ref: '#/definitions/models.StateChange-models_ExecutionStateType'
+      JobID:
+        type: string
+      JobState:
+        description: 'TODO: remove with v1.5
+
+          Deprecated: Left for backward compatibility with v1.4.x clients'
+        allOf:
+        - $ref: '#/definitions/models.StateChange-models_JobStateType'
+      JobVersion:
+        type: integer
+      SeqNum:
+        type: integer
+      Time:
+        type: string
+      Type:
+        $ref: '#/definitions/models.JobHistoryType'
+  apimodels.PutJobRequest:
+    type: object
+    properties:
+      Force:
+        type: boolean
+      Job:
+        $ref: '#/definitions/models.Job'
+      credential:
+        $ref: '#/definitions/apimodels.HTTPCredential'
+      idempotencyToken:
+        type: string
+      namespace:
+        type: string
+  models.ExecutionLogType:
+    type: integer
+    enum:
+    - 0
+    - 1
+    - 2
+    x-enum-varnames:
+    - executionLogTypeUnknown
+    - ExecutionLogTypeSTDOUT
+    - ExecutionLogTypeSTDERR
+  models.State-models_ExecutionDesiredStateType:
+    type: object
+    properties:
+      Details:
+        description: Details is a map of additional details about the state.
+        type: object
+        additionalProperties:
+          type: string
+      Message:
+        description: Message is a human readable message describing the state.
+        type: string
+      StateType:
+        description: StateType is the current state of the object.
+        allOf:
+        - $ref: '#/definitions/models.ExecutionDesiredStateType'
+  models.Job:
+    type: object
+    properties:
+      Constraints:
+        description: Constraints is a selector which must be true for the compute node to run this job.
+        type: array
+        items:
+          $ref: '#/definitions/models.LabelSelectorRequirement'
+      Count:
+        description: 'Count is the number of replicas that should be scheduled.
+
+          For batch and service jobs:
+
+          - If not present in JSON, defaults to 1
+
+          - If explicitly set to 0, means stop all executions
+
+          - If > 0, specifies exact number of replicas
+
+          For daemon and ops jobs:
+
+          - Values of 0 or 1 are ignored (job runs on all matching nodes)
+
+          - Values > 1 are invalid and will cause validation to fail'
+        type: integer
+      CreateTime:
+        type: integer
+      ID:
+        description: 'ID is a unique identifier assigned to this job.
+
+          It helps to distinguish jobs with the same name after they have been deleted and re-created.
+
+          The ID is generated by the server and should not be set directly by the client.'
+        type: string
+      Labels:
+        description: 'Labels is used to associate arbitrary labels with this job, which can be used
+
+          for filtering.
+
+          key=value'
+        type: object
+        additionalProperties:
+          type: string
+      Meta:
+        description: Meta is used to associate arbitrary metadata with this job.
+        type: object
+        additionalProperties:
+          type: string
+      ModifyTime:
+        type: integer
+      Name:
+        description: 'Name is the logical name of the job used to refer to it.
+
+          Submitting a job with the same name as an existing job will result in an
+
+          update to the existing job.'
+        type: string
+      Namespace:
+        description: Namespace is the namespace this job is running in.
+        type: string
+      Priority:
+        description: Priority defines the scheduling priority of this job.
+        type: integer
+      Revision:
+        description: 'Revision is a per-job monotonically increasing revision number that is incremented
+
+          on each update to the job''s state or specification'
+        type: integer
+      State:
+        description: State is the current state of the job.
+        allOf:
+        - $ref: '#/definitions/models.State-models_JobStateType'
+      Tasks:
+        type: array
+        items:
+          $ref: '#/definitions/models.Task'
+      Type:
+        description: Type is the type of job this is, e.g. "daemon" or "batch".
+        type: string
+      Version:
+        description: 'Version is a per-job monotonically increasing version number that is incremented
+
+          on each job specification update.'
+        type: integer
+  models.Execution:
+    type: object
+    properties:
+      AllocatedResources:
+        description: AllocatedResources is the total resources allocated for the execution tasks.
+        allOf:
+        - $ref: '#/definitions/models.AllocatedResources'
+      ComputeState:
+        description: ComputeState observed state of the execution on the compute node
+        allOf:
+        - $ref: '#/definitions/models.State-models_ExecutionStateType'
+      CreateTime:
+        description: 'CreateTime is the time the execution has finished scheduling and been
+
+          verified by the plan applier.'
+        type: integer
+      DesiredState:
+        description: DesiredState of the execution on the compute node
+        allOf:
+        - $ref: '#/definitions/models.State-models_ExecutionDesiredStateType'
+      EvalID:
+        description: ID of the evaluation that generated this execution
+        type: string
+      FollowupEvalID:
+        description: 'FollowupEvalID captures a follow up evaluation created to handle a failed execution
+
+          that can be rescheduled in the future'
+        type: string
+      ID:
+        description: ID of the execution (UUID)
+        type: string
+      Job:
+        description: 'TODO: evaluate using a copy of the job instead of a pointer'
+        allOf:
+        - $ref: '#/definitions/models.Job'
+      JobID:
+        description: 'Job is the parent job of the task being allocated.
+
+          This is copied at execution time to avoid issues if the job
+
+          definition is updated.'
+        type: string
+      JobVersion:
+        description: JobVersion version of the job that this execution was created in
+        type: integer
+      ModifyTime:
+        description: ModifyTime is the time the execution was last updated.
+        type: integer
+      Name:
+        description: Name is a logical name of the execution.
+        type: string
+      Namespace:
+        description: Namespace is the namespace the execution is created in
+        type: string
+      NextExecution:
+        description: NextExecution is the execution that this execution is being replaced by
+        type: string
+      NodeID:
+        description: NodeID is the node this is being placed on
+        type: string
+      PartitionIndex:
+        description: 'PartitionIndex is the index of this execution in the job''s total partitions (0-based)
+
+          Only relevant when Job.Count > 1'
+        type: integer
+      PreviousExecution:
+        description: PreviousExecution is the execution that this execution is replacing
+        type: string
+      PublishedResult:
+        description: the published results for this execution
+        allOf:
+        - $ref: '#/definitions/models.SpecConfig'
+      Revision:
+        description: Revision is increment each time the execution is updated.
+        type: integer
+      RunOutput:
+        description: 'RunOutput is the output of the run command
+
+          TODO: evaluate removing this from execution spec in favour of calling `bacalhau job logs`'
+        allOf:
+        - $ref: '#/definitions/models.RunCommandResult'
+  models.TimeoutConfig:
+    type: object
+    properties:
+      ExecutionTimeout:
+        description: 'ExecutionTimeout is the maximum amount of time a task is allowed to run in seconds.
+
+          Zero means no timeout, such as for a daemon task.'
+        type: integer
+      QueueTimeout:
+        description: 'QueueTimeout is the maximum amount of time a task is allowed to wait in the orchestrator
+
+          queue in seconds before being scheduled. Zero means no timeout.'
+        type: integer
+      TotalTimeout:
+        description: 'TotalTimeout is the maximum amount of time a task is allowed to complete in seconds.
+
+          This includes the time spent in the queue, the time spent executing and the time spent retrying.
+
+          Zero means no timeout.'
+        type: integer
+  models.State-models_JobStateType:
+    type: object
+    properties:
+      Details:
+        description: Details is a map of additional details about the state.
+        type: object
+        additionalProperties:
+          type: string
+      Message:
+        description: Message is a human readable message describing the state.
+        type: string
+      StateType:
+        description: StateType is the current state of the object.
+        allOf:
+        - $ref: '#/definitions/models.JobStateType'
+  apimodels.DiffJobResponse:
+    type: object
+    properties:
+      Diff:
+        type: string
+      Warnings:
+        type: array
+        items:
+          type: string
+  models.NodeState:
+    type: object
+    properties:
+      Connection:
+        description: 'Deprecated: Use ConnectionState.Status instead'
+        allOf:
+        - $ref: '#/definitions/models.NodeConnectionState'
+      ConnectionState:
+        description: Connection and messaging state
+        allOf:
+        - $ref: '#/definitions/models.ConnectionState'
+      Info:
+        description: Durable node information
+        allOf:
+        - $ref: '#/definitions/models.NodeInfo'
+      Membership:
+        $ref: '#/definitions/models.NodeMembershipState'
+  apimodels.RerunJobResponse:
+    type: object
+    properties:
+      EvaluationID:
+        type: string
+      JobID:
+        type: string
+      JobVersion:
+        type: integer
+      Warnings:
+        type: array
+        items:
+          type: string
+  models.NodeInfo:
+    type: object
+    properties:
+      BacalhauVersion:
+        $ref: '#/definitions/models.BuildVersionInfo'
+      ComputeNodeInfo:
+        $ref: '#/definitions/models.ComputeNodeInfo'
+      Labels:
+        type: object
+        additionalProperties:
+          type: string
+      NodeID:
+        type: string
+      NodeType:
+        $ref: '#/definitions/models.NodeType'
+      SupportedProtocols:
+        description: SupportedProtocols indicates which communication protocols this node supports
+        type: array
+        items:
+          $ref: '#/definitions/models.Protocol'
+  models.State-models_ExecutionStateType:
+    type: object
+    properties:
+      Details:
+        description: Details is a map of additional details about the state.
+        type: object
+        additionalProperties:
+          type: string
+      Message:
+        description: Message is a human readable message describing the state.
+        type: string
+      StateType:
+        description: StateType is the current state of the object.
+        allOf:
+        - $ref: '#/definitions/models.ExecutionStateType'
+  models.NetworkConfig:
+    type: object
+    properties:
+      Domains:
+        type: array
+        items:
+          type: string
+      Ports:
+        type: array
+        items:
+          $ref: '#/definitions/models.Port'
+      Type:
+        $ref: '#/definitions/models.Network'
+  models.BuildVersionInfo:
+    type: object
+    properties:
+      BuildDate:
+        type: string
+        example: '2022-11-16T14:03:31Z'
+      GOARCH:
+        type: string
+        example: amd64
+      GOOS:
+        type: string
+        example: linux
+      GitCommit:
+        type: string
+        example: d612b63108f2b5ce1ab2b9e02444eb1dac1d922d
+      GitVersion:
+        type: string
+        example: v0.3.12
+      Major:
+        type: string
+        example: '0'
+      Minor:
+        type: string
+        example: '3'
+  models.Port:
+    type: object
+    properties:
+      HostNetwork:
+        description: 'HostNetwork specifies which network interface to bind to.
+
+          If empty, defaults to "0.0.0.0" (all interfaces).
+
+          Can be set to "127.0.0.1" to only allow local connections.'
+        type: string
+      Name:
+        description: 'Name is a required identifier for this port mapping.
+
+          It will be used to create environment variables to inform the task
+
+          about its allocated ports.'
+        type: string
+      Static:
+        description: 'Static is the host port to use. If not specified, a port will be
+
+          auto-allocated from the compute node''s port range'
+        type: integer
+      Target:
+        description: 'Target is the port inside the task/container that should be exposed.
+
+          Only valid for Bridge network mode. If not specified in Bridge mode,
+
+          it will default to the same value as the host port.'
+        type: integer
+  apimodels.DiffJobRequest:
+    type: object
+    properties:
+      Job:
+        $ref: '#/definitions/models.Job'
+      credential:
+        $ref: '#/definitions/apimodels.HTTPCredential'
+      idempotencyToken:
+        type: string
+      namespace:
+        type: string
+  models.InputSource:
+    type: object
+    properties:
+      Alias:
+        description: 'Alias is an optional reference to this input source that can be used for
+
+          dynamic linking to this input. (e.g. dynamic import in wasm by alias)'
+        type: string
+      Source:
+        description: Source is the source of the artifact to be downloaded, e.g a URL, S3 bucket, etc.
+        allOf:
+        - $ref: '#/definitions/models.SpecConfig'
+      Target:
+        description: Target is the path where the artifact should be mounted on
+        type: string
+  apimodels.GetNodeResponse:
+    type: object
+    properties:
+      Node:
+        $ref: '#/definitions/models.NodeState'
+  apimodels.ListJobHistoryResponse:
+    type: object
+    properties:
+      Items:
+        type: array
+        items:
+          $ref: '#/definitions/models.JobHistory'
+      NextToken:
+        type: string
