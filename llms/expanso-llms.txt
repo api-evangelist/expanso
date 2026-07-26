@@ -1,0 +1,78 @@
+# Expanso Platform Documentation
+
+> Expanso is a managed platform for deploying intelligent data pipelines at the edge. Process, filter, and transform data where it's generated - reducing bandwidth, latency, and costs.
+
+## Common Mistakes (Read First)
+
+Before building, read [Common Mistakes](/llms/common-mistakes.txt) — covers the most frequent errors with YAML formats, CLI endpoints, and deployment.
+
+## Quick Start
+
+### Install Expanso Edge
+
+```bash
+# Linux/macOS
+curl -fsSL https://get.expanso.io/edge/install.sh | bash
+
+# Verify installation
+expanso-edge version
+```
+
+### Run Expanso Edge
+
+```bash
+# Start the edge node (connects to Expanso Cloud)
+expanso-edge run
+
+# Or run standalone with a pipeline config file
+expanso-edge run --config pipeline.yaml
+```
+
+## Documentation Sections
+
+- [Common Mistakes](/llms/common-mistakes.txt): YAML format confusion, CLI endpoint, token reuse, deploy recipe
+- [Getting Started](/llms/getting-started.txt): Installation, core concepts, first pipeline
+- [Components](/llms/components.txt): Index of 200+ components (fetch individual files for full docs)
+  - [Inputs index](/llms/components/inputs.txt): All input components — fetch e.g. `/llms/components/inputs/kafka.txt`
+  - [Processors index](/llms/components/processors.txt): All processor components
+  - [Outputs index](/llms/components/outputs.txt): All output components
+- [Examples](/llms/examples.txt): Working pipeline examples
+- [Use Cases](/llms/use-cases.txt): Real-world scenarios (IoT, logs, analytics, alerting)
+- [Guides](/llms/guides.txt): Pipeline configuration, Bloblang, resources
+- [Operations](/llms/operations.txt): Deployment, monitoring, configuration
+- [CLI Reference](/llms/cli.txt): expanso-edge and expanso-cli commands
+
+## How to Use Component Docs
+
+Components use a two-level lookup to save tokens:
+
+1. Fetch the type index (e.g., `/llms/components/inputs.txt`) — lightweight table of all components
+2. Fetch only the component(s) you need (e.g., `/llms/components/inputs/kafka.txt`) — full config reference
+
+## Pipeline Structure
+
+```yaml
+input:
+  kafka:
+    addresses: ["broker:9092"]
+    topics: ["events"]
+
+pipeline:
+  processors:
+    - mapping: |
+        root = this
+        root.timestamp = now()
+
+output:
+  aws_s3:
+    bucket: my-bucket
+    path: "${! timestamp_unix() }.json"
+```
+
+## Related Resources
+
+- [Expanso Examples](https://examples.expanso.io/llms.txt): Production-ready pipeline examples and configurations
+
+## Full Documentation
+
+See https://docs.expanso.io for complete documentation.

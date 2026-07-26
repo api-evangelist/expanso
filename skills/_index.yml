@@ -1,0 +1,24 @@
+generated: '2026-07-19'
+method: generated
+source: openapi/bacalhau-openapi-original.json
+description: >-
+  Packaged Agent Skills for the Bacalhau Orchestrator API. Every step is
+  grounded in a real operationId verified against the OpenAPI.
+skills:
+  - file: expanso-submit-and-monitor-job.md
+    name: Submit and monitor a distributed compute job
+    api: openapi/bacalhau-openapi-original.json
+    operations:
+      - orchestrator/putJob
+      - orchestrator/getJob
+      - orchestrator/listHistory
+      - orchestrator/logs
+      - orchestrator/jobResults
+  - file: expanso-manage-orchestrator-nodes.md
+    name: Inspect and manage orchestrator nodes
+    api: openapi/bacalhau-openapi-original.json
+    operations:
+      - orchestrator/listNodes
+      - orchestrator/getNode
+      - orchestrator/updateNode
+      - agent/version

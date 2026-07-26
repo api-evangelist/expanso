@@ -1,0 +1,32 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Bacalhau Orchestrator API
+  version: 1.0.0
+extends: openapi/bacalhau-openapi-original.json
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-provider: expanso
+      x-apievangelist-product: bacalhau
+      x-apievangelist-open-source: true
+      x-apievangelist-repository: https://github.com/bacalhau-project/bacalhau
+      x-apievangelist-idempotency:
+        supported: true
+        field: idempotencyToken
+        scope: putJob
+      x-apievangelist-pagination:
+        style: cursor
+        params: [limit, next_token, order_by, reverse]
+        response_fields: [Items, NextToken]
+  - target: $.info
+    update:
+      description: >-
+        Bacalhau Orchestrator REST API for submitting and managing distributed
+        compute jobs close to the data. The default self-hosted host is
+        localhost:1234; Expanso Cloud exposes a managed deployment. See
+        conventions/bacalhau-conventions.yml and errors/bacalhau-problem-types.yml.
+  - target: $
+    update:
+      x-apievangelist-servers-note: >-
+        The published spec pins host localhost:1234 (the default self-hosted
+        orchestrator). Point clients at your own orchestrator or Expanso Cloud.

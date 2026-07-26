@@ -1,0 +1,43 @@
+generated: '2026-07-19'
+method: searched
+source: https://github.com/bacalhau-project/bacalhau/releases
+description: >-
+  Release history for Bacalhau, the open-source distributed compute engine
+  behind Expanso. Published as dated GitHub releases with a full compare link
+  per tag. Recent window only; the GitHub releases page is the source of truth.
+scheme: semver
+current_version: v1.9.1
+releases_url: https://github.com/bacalhau-project/bacalhau/releases
+entries:
+  - version: v1.9.1
+    date: '2026-07-18'
+    breaking: false
+    highlights:
+      - Fix smoke-test friction (version parse, dev-compat, no-profile API)
+      - Refresh dependencies and apply latest security patches
+      - Repair dependency update container tests
+    url: https://github.com/bacalhau-project/bacalhau/releases/tag/v1.9.1
+  - version: v1.9.0
+    date: '2026-04-19'
+    breaking: false
+    highlights:
+      - Minor feature release
+    url: https://github.com/bacalhau-project/bacalhau/releases/tag/v1.9.0
+  - version: v1.8.0
+    date: '2025-06-23'
+    breaking: false
+    highlights:
+      - Minor feature release
+    url: https://github.com/bacalhau-project/bacalhau/releases/tag/v1.8.0
+  - version: v1.7.0
+    date: '2025-03-24'
+    breaking: false
+    highlights:
+      - Minor feature release
+    url: https://github.com/bacalhau-project/bacalhau/releases/tag/v1.7.0
+  - version: v1.6.5
+    date: '2025-03-09'
+    breaking: false
+    highlights:
+      - Patch release
+    url: https://github.com/bacalhau-project/bacalhau/releases/tag/v1.6.5

@@ -1,0 +1,51 @@
+generated: '2026-07-19'
+method: searched
+source: https://pypi.org/project/bacalhau-sdk/
+description: >-
+  First-party client libraries and CLI binaries for Bacalhau (the open-source
+  distributed compute engine behind Expanso) and Expanso Edge. Verified against
+  PyPI, pkg.go.dev, and the project install docs. Registry HTTP status recorded
+  at fetch time.
+packages:
+  - language: python
+    registry: pypi
+    name: bacalhau-sdk
+    version: 1.4.2
+    url: https://pypi.org/project/bacalhau-sdk/
+    source: https://github.com/bacalhau-project/bacalhau/
+    install: pip install bacalhau-sdk
+    status: 200
+    official: true
+  - language: python
+    registry: pypi
+    name: bacalhau-apiclient
+    version: 1.4.1
+    url: https://pypi.org/project/bacalhau-apiclient/
+    source: https://github.com/bacalhau-project/bacalhau/
+    install: pip install bacalhau-apiclient
+    status: 200
+    official: true
+  - language: go
+    registry: pkg.go.dev
+    name: github.com/bacalhau-project/bacalhau
+    url: https://pkg.go.dev/github.com/bacalhau-project/bacalhau
+    source: https://github.com/bacalhau-project/bacalhau
+    install: go get github.com/bacalhau-project/bacalhau
+    status: 200
+    official: true
+  - language: shell
+    registry: install-script
+    name: bacalhau
+    url: https://get.bacalhau.org/install.sh
+    source: https://github.com/bacalhau-project/bacalhau
+    install: curl -sL https://get.bacalhau.org/install.sh | bash
+    kind: cli
+    official: true
+  - language: shell
+    registry: install-script
+    name: expanso-edge
+    url: https://get.expanso.io/edge/install.sh
+    source: https://docs.expanso.io/getting-started/installation
+    install: curl -fsSL https://get.expanso.io/edge/install.sh | bash
+    kind: cli
+    official: true

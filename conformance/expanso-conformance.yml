@@ -1,0 +1,28 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/bacalhau-openapi-original.json
+description: >-
+  Cross-cutting standards conformance for the Bacalhau Orchestrator API,
+  derived from the OpenAPI structure and conventions. Bacalhau is not a
+  payments/identity API; most vertical standards are not applicable.
+standards:
+  - id: openapi
+    conforms: true
+    evidence: Published Swagger 2.0 specification (pkg/swagger/swagger.json)
+  - id: rest
+    conforms: true
+    evidence: Resource-oriented /api/v1 paths with standard HTTP verbs
+  - id: cursor-pagination
+    conforms: true
+    evidence: limit + next_token query params, Items + NextToken response fields
+  - id: idempotency
+    conforms: true
+    evidence: PutJobRequest.idempotencyToken on job submission
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: Error bodies are application/json, not application/problem+json
+  - id: oauth2
+    conforms: false
+    evidence: No oauth2 securityScheme declared in the spec
+  - id: json-api
+    conforms: false

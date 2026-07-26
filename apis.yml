@@ -1,7 +1,16 @@
 aid: expanso
 name: Expanso
-description: Expanso is a company surfaced as a portfolio company of general-catalyst and added to the
-  API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Expanso is the company behind Bacalhau, an open-source distributed compute
+  orchestration framework that brings compute to the data by running jobs close
+  to where data is generated across edge, on-premise, and cloud environments.
+  Expanso Cloud is the managed platform for deploying intelligent data pipelines
+  at the edge - filtering, transforming, and governing data (PII/GDPR compliance,
+  lineage) before it reaches downstream platforms like Snowflake and Databricks.
+  The Bacalhau Orchestrator API exposes job submission, execution history,
+  results, log streaming, and node/agent management over a versioned REST
+  interface. Expanso is backed by General Catalyst and was named Edge AI Startup
+  of the Year 2026.
 url: https://raw.githubusercontent.com/api-evangelist/expanso/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -9,14 +18,134 @@ x-backed-by:
 - general-catalyst
 x-tier: stub
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
+image: https://expanso.io/favicon.ico
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
-apis: []
+- Distributed Computing
+- Edge Computing
+- Compute Orchestration
+- Data Pipelines
+- Data Governance
+- Open Source
+- AI
+- Job Orchestration
+apis:
+- aid: expanso:expanso-ops-api
+  name: Expanso Ops API
+  description: The Ops API from Expanso — 6 operation(s) for ops.
+  humanURL: https://bacalhau.org/docs/
+  baseURL: https://cloud.expanso.io
+  tags:
+  - Ops
+  properties:
+  - type: OpenAPI
+    url: openapi/expanso-ops-api-openapi.yml
+  - type: Documentation
+    url: https://bacalhau.org/docs/
+  - type: APIReference
+    url: https://bacalhau.org/docs/cli-api/api/
+  - type: ErrorCatalog
+    url: errors/bacalhau-problem-types.yml
+  - type: DataModel
+    url: data-model/bacalhau-data-model.yml
+  - type: Conventions
+    url: conventions/bacalhau-conventions.yml
+  - type: Idempotency
+    url: conventions/bacalhau-conventions.yml
+  - type: AgenticAccess
+    url: agentic-access/expanso-agentic-access.yml
+- aid: expanso:expanso-orchestrator-api
+  name: Expanso Orchestrator API
+  description: The Orchestrator API from Expanso — 11 operation(s) for orchestrator.
+  humanURL: https://bacalhau.org/docs/
+  baseURL: https://cloud.expanso.io
+  tags:
+  - Orchestrator
+  properties:
+  - type: OpenAPI
+    url: openapi/expanso-orchestrator-api-openapi.yml
+  - type: Documentation
+    url: https://bacalhau.org/docs/
+  - type: APIReference
+    url: https://bacalhau.org/docs/cli-api/api/
+  - type: ErrorCatalog
+    url: errors/bacalhau-problem-types.yml
+  - type: DataModel
+    url: data-model/bacalhau-data-model.yml
+  - type: Conventions
+    url: conventions/bacalhau-conventions.yml
+  - type: Idempotency
+    url: conventions/bacalhau-conventions.yml
+  - type: AgenticAccess
+    url: agentic-access/expanso-agentic-access.yml
+common:
+- type: DeveloperPortal
+  url: https://docs.expanso.io
+- type: Documentation
+  url: https://bacalhau.org/docs/
+- type: APIReference
+  url: https://bacalhau.org/docs/cli-api/api/
+- type: GettingStarted
+  url: https://docs.expanso.io/getting-started/quickstart/
+- type: Blog
+  url: https://expanso.io/blog/
+- type: Support
+  url: https://expanso.io/help-center/
+- type: HelpCenter
+  url: https://expanso.io/help-center/
+- type: Pricing
+  url: https://expanso.io/pricing/
+- type: SignUp
+  url: https://cloud.expanso.io
+- type: TermsOfService
+  url: https://expanso.io/terms/
+- type: PrivacyPolicy
+  url: https://expanso.io/privacy-policy/
+- type: GitHubOrganization
+  url: https://github.com/bacalhau-project
+- type: StatusPage
+  url: https://status.expanso.io
+- type: LLMsTxt
+  url: llms/expanso-llms.txt
+- type: Packages
+  url: packages/expanso-packages.yml
+- type: SDKs
+  url: packages/expanso-packages.yml
+- type: CLI
+  url: cli/expanso-cli.yml
+- type: ChangeLog
+  url: changelog/expanso-changelog.yml
+- type: Lifecycle
+  url: lifecycle/expanso-lifecycle.yml
+- type: DomainSecurity
+  url: security/expanso-domain-security.yml
+- type: Conformance
+  url: conformance/expanso-conformance.yml
+- type: MCPServer
+  url: mcp/expanso-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

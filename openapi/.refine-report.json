@@ -1,0 +1,19 @@
+{
+  "provider": "expanso",
+  "sources": [
+    "expanso-ops-api-openapi.yml",
+    "expanso-orchestrator-api-openapi.yml"
+  ],
+  "outputs": [
+    "expanso-ops-api-openapi.yml",
+    "expanso-orchestrator-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [
+    "expanso-ops-api-openapi.yml: info.version missing",
+    "expanso-orchestrator-api-openapi.yml: info.version missing"
+  ],
+  "notes": [],
+  "skipped": []
+}

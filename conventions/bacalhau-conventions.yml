@@ -1,0 +1,53 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/bacalhau-openapi-original.json
+description: >-
+  Cross-cutting request/response semantics for the Bacalhau Orchestrator API,
+  derived from the OpenAPI (Swagger 2.0) and the API reference.
+versioning:
+  scheme: uri-path
+  current: v1
+  base_path: /api/v1
+authentication:
+  style: token
+  note: >-
+    The orchestrator exposes an agent/authconfig endpoint that advertises the
+    node's supported auth methods; the OpenAPI declares no global
+    securityScheme. See authentication docs at bacalhau.org/docs.
+idempotency:
+  supported: true
+  mechanism: request-field
+  field: idempotencyToken
+  scope: PutJob (job submission)
+  evidence: apimodels.PutJobRequest.idempotencyToken
+  note: >-
+    Job submission (PUT /api/v1/orchestrator/jobs) accepts an idempotencyToken
+    so a retried submission is not executed twice. A Force flag allows
+    overriding a matched idempotent submission.
+pagination:
+  style: cursor
+  request_params:
+    limit: max items per page
+    next_token: opaque cursor for the next page
+    order_by: sort field
+    reverse: reverse sort order
+  response_fields:
+    items: Items
+    next_cursor: NextToken
+  applies_to:
+    - orchestrator/listJobs
+    - orchestrator/jobExecutions
+    - orchestrator/listHistory
+    - orchestrator/listNodes
+error_envelope:
+  media_type: application/json
+  format: http-status
+  cross_ref: errors/bacalhau-problem-types.yml
+log_streaming:
+  mechanism: websocket-upgrade
+  operation: orchestrator/logs
+  note: GET /api/v1/orchestrator/jobs/{id}/logs upgrades (HTTP 101) to stream job logs.
+cross_references:
+  errors: errors/bacalhau-problem-types.yml
+  lifecycle: lifecycle/expanso-lifecycle.yml
+  data_model: data-model/bacalhau-data-model.yml

@@ -1,0 +1,61 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/bacalhau-openapi-original.json
+description: >-
+  Entity-relationship graph for the Bacalhau Orchestrator API, derived from the
+  OpenAPI definitions and path structure (jobs own executions, history,
+  results, and versions; nodes run executions).
+entities:
+  - name: Job
+    model: models.Job
+    id_field: JobID
+    description: A distributed compute job submitted to the orchestrator.
+    relationships:
+      - type: has_many
+        target: Execution
+        via: JobID
+        path: /api/v1/orchestrator/jobs/{id}/executions
+      - type: has_many
+        target: JobHistory
+        via: JobID
+        path: /api/v1/orchestrator/jobs/{id}/history
+      - type: has_many
+        target: JobResult
+        via: JobID
+        path: /api/v1/orchestrator/jobs/{id}/results
+      - type: has_many
+        target: JobVersion
+        via: JobID
+        path: /api/v1/orchestrator/jobs/{id}/versions
+  - name: Execution
+    model: models.Execution
+    description: A single run of a job on a compute node.
+    relationships:
+      - type: belongs_to
+        target: Job
+        via: JobID
+      - type: belongs_to
+        target: Node
+        via: NodeID
+  - name: JobHistory
+    model: models.JobHistory
+    description: State-change timeline entries for a job.
+    relationships:
+      - type: belongs_to
+        target: Job
+        via: JobID
+  - name: JobResult
+    model: apimodels.ListJobResultsResponse
+    description: Published results/outputs of a completed job.
+    relationships:
+      - type: belongs_to
+        target: Job
+        via: JobID
+  - name: Node
+    model: models.NodeState
+    id_field: NodeID
+    description: An orchestrator or compute node in the network.
+    relationships:
+      - type: has_many
+        target: Execution
+        via: NodeID

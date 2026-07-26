@@ -1,0 +1,46 @@
+generated: '2026-07-19'
+method: searched
+source: https://bacalhau.org/docs/cli-api/
+description: >-
+  First-party command-line interfaces. `bacalhau` is the open-source
+  distributed compute CLI that talks to the Bacalhau Orchestrator API; the
+  managed Expanso platform ships `expanso-edge` for edge pipeline nodes.
+clis:
+  - name: bacalhau
+    docs: https://bacalhau.org/docs/cli-api/
+    source: https://github.com/bacalhau-project/bacalhau
+    install:
+      - method: script
+        command: curl -sL https://get.bacalhau.org/install.sh | bash
+      - method: go
+        command: go install github.com/bacalhau-project/bacalhau@latest
+    talks_to_api: openapi/bacalhau-openapi-original.json
+    command_groups:
+      - group: job
+        description: Submit, inspect, stop, rerun, and list distributed compute jobs
+        commands: [run, list, describe, logs, stop, rerun, executions, history]
+      - group: node
+        description: List and inspect orchestrator/compute nodes
+        commands: [list, describe]
+      - group: agent
+        description: Introspect the local agent (version, node info, config)
+        commands: [version, node, config, alive]
+      - group: config
+        description: View and set client/node configuration
+        commands: [list, set, default]
+      - group: version
+        description: Show the Bacalhau client and server version
+  - name: expanso-edge
+    docs: https://docs.expanso.io/getting-started/installation
+    install:
+      - method: script
+        command: curl -fsSL https://get.expanso.io/edge/install.sh | bash
+    key_flows:
+      - name: run
+        command: expanso-edge run
+        description: Start an edge node and connect to Expanso Cloud
+      - name: run-standalone
+        command: expanso-edge run --config pipeline.yaml
+        description: Run standalone with a local pipeline config file
+      - name: version
+        command: expanso-edge version

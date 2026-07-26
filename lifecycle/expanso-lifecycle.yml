@@ -1,0 +1,20 @@
+generated: '2026-07-19'
+method: searched
+source: https://github.com/bacalhau-project/bacalhau/releases
+description: >-
+  Lifecycle posture for Bacalhau (open-source engine behind Expanso) and the
+  Expanso platform: versioning scheme, release cadence, and status page.
+versioning:
+  scheme: uri-path
+  current: v1
+  product_version: v1.9.1
+  releases: https://github.com/bacalhau-project/bacalhau/releases
+  docs: https://bacalhau.org/docs/
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No formal published deprecation/Sunset-header policy located.
+status_page: https://status.expanso.io
+sla:
+  url: null
+deprecated_operations: []

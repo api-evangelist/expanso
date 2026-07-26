@@ -1,0 +1,45 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/bacalhau-openapi-original.json
+format: http
+description: >-
+  Error responses derived from the Bacalhau Orchestrator API OpenAPI (Swagger
+  2.0). The API returns standard HTTP status codes; error bodies are not
+  application/problem+json. Titles/remediation enriched from the API reference.
+envelope:
+  media_type: application/json
+  note: >-
+    Error responses carry a JSON body with a message describing the failure;
+    the API does not use RFC 9457 problem+json.
+problems:
+  - status: 400
+    title: Bad Request
+    meaning: The request was malformed or contained invalid job/node parameters.
+    remediation: Validate the job or node specification against the API schema before resubmitting.
+    seen_on:
+      - orchestrator/listJobs
+      - orchestrator/putJob
+      - orchestrator/getJob
+      - orchestrator/stopJob
+      - orchestrator/rerunJob
+      - orchestrator/updateNode
+  - status: 404
+    title: Not Found
+    meaning: The referenced job or node id does not exist.
+    remediation: Confirm the id returned by the list/put operation; ids are opaque and case-sensitive.
+    seen_on:
+      - orchestrator/getNode
+      - orchestrator/updateNode
+  - status: 500
+    title: Internal Server Error
+    meaning: The orchestrator encountered an unexpected error while processing the request.
+    remediation: Retry with backoff; inspect agent/debug and node logs if the failure persists.
+    seen_on:
+      - orchestrator/listJobs
+      - orchestrator/putJob
+      - orchestrator/getJob
+      - orchestrator/stopJob
+      - orchestrator/rerunJob
+      - orchestrator/listNodes
+      - agent/config
+      - agent/node
