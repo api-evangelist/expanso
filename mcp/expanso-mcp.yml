@@ -2,60 +2,65 @@ generated: '2026-07-19'
 method: derived
 status: candidate
 source: openapi/bacalhau-openapi-original.json
-description: >-
-  Candidate MCP tool surface derived one-per-operation from the Bacalhau
-  Orchestrator API OpenAPI. No official hosted Expanso/Bacalhau MCP server was
-  located at time of enrichment; this is a governance starting point.
+description: Candidate MCP tool surface derived one-per-operation from the Bacalhau Orchestrator API OpenAPI.
+  No official hosted Expanso/Bacalhau MCP server was located at time of enrichment; this is a governance
+  starting point.
 server:
   name: expanso-bacalhau
   transport: http
   url: null
 tools:
-  - name: submit_job
-    description: Submit a distributed compute job to the orchestrator
-    source_operation: openapi/bacalhau-openapi-original.json#orchestrator/putJob
-  - name: get_job
-    description: Get a job by id
-    source_operation: openapi/bacalhau-openapi-original.json#orchestrator/getJob
-  - name: list_jobs
-    description: List jobs (cursor-paginated)
-    source_operation: openapi/bacalhau-openapi-original.json#orchestrator/listJobs
-  - name: stop_job
-    description: Stop a running job
-    source_operation: openapi/bacalhau-openapi-original.json#orchestrator/stopJob
-  - name: rerun_job
-    description: Re-run a job
-    source_operation: openapi/bacalhau-openapi-original.json#orchestrator/rerunJob
-  - name: diff_job
-    description: Diff a job specification against an existing job
-    source_operation: openapi/bacalhau-openapi-original.json#orchestrator/diffJob
-  - name: list_job_executions
-    description: List executions for a job
-    source_operation: openapi/bacalhau-openapi-original.json#orchestrator/jobExecutions
-  - name: list_job_history
-    description: List the state-change history of a job
-    source_operation: openapi/bacalhau-openapi-original.json#orchestrator/listHistory
-  - name: get_job_results
-    description: Get the published results of a job
-    source_operation: openapi/bacalhau-openapi-original.json#orchestrator/jobResults
-  - name: list_job_versions
-    description: List versions of a job
-    source_operation: openapi/bacalhau-openapi-original.json#orchestrator/jobVersions
-  - name: stream_job_logs
-    description: Stream logs for a job (websocket upgrade)
-    source_operation: openapi/bacalhau-openapi-original.json#orchestrator/logs
-  - name: list_nodes
-    description: List orchestrator/compute nodes
-    source_operation: openapi/bacalhau-openapi-original.json#orchestrator/listNodes
-  - name: get_node
-    description: Get a node by id
-    source_operation: openapi/bacalhau-openapi-original.json#orchestrator/getNode
-  - name: update_node
-    description: Update a node (membership/approval)
-    source_operation: openapi/bacalhau-openapi-original.json#orchestrator/updateNode
-  - name: agent_version
-    description: Get the agent/server version
-    source_operation: openapi/bacalhau-openapi-original.json#agent/version
-  - name: agent_node
-    description: Get local agent node info
-    source_operation: openapi/bacalhau-openapi-original.json#agent/node
+- name: submit_job
+  description: Submit a distributed compute job to the orchestrator
+  source_operation: openapi/bacalhau-openapi-original.json#orchestrator/putJob
+- name: get_job
+  description: Get a job by id
+  source_operation: openapi/bacalhau-openapi-original.json#orchestrator/getJob
+- name: list_jobs
+  description: List jobs (cursor-paginated)
+  source_operation: openapi/bacalhau-openapi-original.json#orchestrator/listJobs
+- name: stop_job
+  description: Stop a running job
+  source_operation: openapi/bacalhau-openapi-original.json#orchestrator/stopJob
+- name: rerun_job
+  description: Re-run a job
+  source_operation: openapi/bacalhau-openapi-original.json#orchestrator/rerunJob
+- name: diff_job
+  description: Diff a job specification against an existing job
+  source_operation: openapi/bacalhau-openapi-original.json#orchestrator/diffJob
+- name: list_job_executions
+  description: List executions for a job
+  source_operation: openapi/bacalhau-openapi-original.json#orchestrator/jobExecutions
+- name: list_job_history
+  description: List the state-change history of a job
+  source_operation: openapi/bacalhau-openapi-original.json#orchestrator/listHistory
+- name: get_job_results
+  description: Get the published results of a job
+  source_operation: openapi/bacalhau-openapi-original.json#orchestrator/jobResults
+- name: list_job_versions
+  description: List versions of a job
+  source_operation: openapi/bacalhau-openapi-original.json#orchestrator/jobVersions
+- name: stream_job_logs
+  description: Stream logs for a job (websocket upgrade)
+  source_operation: openapi/bacalhau-openapi-original.json#orchestrator/logs
+- name: list_nodes
+  description: List orchestrator/compute nodes
+  source_operation: openapi/bacalhau-openapi-original.json#orchestrator/listNodes
+- name: get_node
+  description: Get a node by id
+  source_operation: openapi/bacalhau-openapi-original.json#orchestrator/getNode
+- name: update_node
+  description: Update a node (membership/approval)
+  source_operation: openapi/bacalhau-openapi-original.json#orchestrator/updateNode
+- name: agent_version
+  description: Get the agent/server version
+  source_operation: openapi/bacalhau-openapi-original.json#agent/version
+- name: agent_node
+  description: Get local agent node info
+  source_operation: openapi/bacalhau-openapi-original.json#agent/node
+deployment:
+  mode: none
+  verified: derived
+  tools: 16
+  checked: '2026-08-12'
+  source: catalog MCP census

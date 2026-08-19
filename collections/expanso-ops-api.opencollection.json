@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Bacalhau Ops API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Ops",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "agent/alive",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/agent/alive"
+          }
+        },
+        {
+          "info": {
+            "name": "Returns the OAuth2 configuration of the node.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/agent/authconfig"
+          },
+          "docs": "Returns the OAuth2 configuration of the node."
+        },
+        {
+          "info": {
+            "name": "Returns the current configuration of the node.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/agent/config"
+          },
+          "docs": "Returns the current configuration of the node."
+        },
+        {
+          "info": {
+            "name": "Returns debug information on what the current node is doing.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/agent/debug"
+          },
+          "docs": "Returns debug information on what the current node is doing."
+        },
+        {
+          "info": {
+            "name": "Returns the info of the node.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/agent/node"
+          },
+          "docs": "Returns the info of the node."
+        },
+        {
+          "info": {
+            "name": "Returns the build version running on the server.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/agent/version"
+          },
+          "docs": "See https://github.com/bacalhau-project/bacalhau/releases for a complete list of `gitversion` tags."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

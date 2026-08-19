@@ -1,0 +1,453 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Bacalhau Ops Orchestrator API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Orchestrator",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns a list of jobs.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/orchestrator/jobs",
+            "params": [
+              {
+                "name": "namespace",
+                "value": "",
+                "type": "query",
+                "description": "Namespace to get the jobs for"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of jobs returned"
+              },
+              {
+                "name": "next_token",
+                "value": "",
+                "type": "query",
+                "description": "Token to get the next page of jobs"
+              },
+              {
+                "name": "reverse",
+                "value": "",
+                "type": "query",
+                "description": "Reverse the order of the jobs"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "Order the jobs by the given field"
+              }
+            ]
+          },
+          "docs": "Returns a list of jobs."
+        },
+        {
+          "info": {
+            "name": "Submits a job to the orchestrator.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/orchestrator/jobs"
+          },
+          "docs": "Submits a job to the orchestrator."
+        },
+        {
+          "info": {
+            "name": "Compares a job spec with an existing job of the same name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/orchestrator/jobs/diff"
+          },
+          "docs": "Compares a submitted job spec with the existing job that has the same name, and returns the differences between them."
+        },
+        {
+          "info": {
+            "name": "Returns a job.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/orchestrator/jobs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID to get the job for"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "history and executions options. Empty includes nothing"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to fetch. Use with include parameter"
+              },
+              {
+                "name": "job_version",
+                "value": "",
+                "type": "query",
+                "description": "Job version to get. Defaults to 0."
+              }
+            ]
+          },
+          "docs": "Returns a job."
+        },
+        {
+          "info": {
+            "name": "Stops a job.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/orchestrator/jobs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID to stop the job for"
+              },
+              {
+                "name": "reason",
+                "value": "",
+                "type": "query",
+                "description": "Reason for stopping the job"
+              }
+            ]
+          },
+          "docs": "Stops a job."
+        },
+        {
+          "info": {
+            "name": "Returns the executions of a job.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/orchestrator/jobs/:id/executions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID to get the job executions for"
+              },
+              {
+                "name": "namespace",
+                "value": "",
+                "type": "query",
+                "description": "Namespace to get the jobs for"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of executions returned"
+              },
+              {
+                "name": "next_token",
+                "value": "",
+                "type": "query",
+                "description": "Token to get the next page of executions"
+              },
+              {
+                "name": "reverse",
+                "value": "",
+                "type": "query",
+                "description": "Reverse the order of the executions"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "Order the executions by the given field"
+              }
+            ]
+          },
+          "docs": "Returns the executions of a job."
+        },
+        {
+          "info": {
+            "name": "Returns the history of a job.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/orchestrator/jobs/:id/history",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID to get the job history for"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of history events returned"
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Only return history since this time"
+              },
+              {
+                "name": "event_type",
+                "value": "",
+                "type": "query",
+                "description": "Only return history of this event type"
+              },
+              {
+                "name": "execution_id",
+                "value": "",
+                "type": "query",
+                "description": "Only return history of this execution ID"
+              },
+              {
+                "name": "next_token",
+                "value": "",
+                "type": "query",
+                "description": "Token to get the next page of the history events"
+              }
+            ]
+          },
+          "docs": "Returns the history of a job."
+        },
+        {
+          "info": {
+            "name": "Streams the logs for a current job/execution via WebSocket",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/orchestrator/jobs/:id/logs",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the job to stream logs for"
+              },
+              {
+                "name": "execution_id",
+                "value": "",
+                "type": "query",
+                "description": "Fetch logs for a specific execution"
+              },
+              {
+                "name": "tail",
+                "value": "",
+                "type": "query",
+                "description": "Fetch historical logs"
+              },
+              {
+                "name": "follow",
+                "value": "",
+                "type": "query",
+                "description": "Follow the logs"
+              }
+            ]
+          },
+          "docs": "Establishes a WebSocket connection to stream output from the job specified by `id`\nThe stream will continue until either the client disconnects or the execution completes"
+        },
+        {
+          "info": {
+            "name": "Reruns a job.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/orchestrator/jobs/:id/rerun",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the job to rerun"
+              }
+            ]
+          },
+          "docs": "Reruns a job with the specified job ID or name."
+        },
+        {
+          "info": {
+            "name": "Returns the results of a job.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/orchestrator/jobs/:id/results",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID to get the job results for"
+              }
+            ]
+          },
+          "docs": "Returns the results of a job."
+        },
+        {
+          "info": {
+            "name": "Returns the versions of a job.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/orchestrator/jobs/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or Name to get the job versions for"
+              },
+              {
+                "name": "namespace",
+                "value": "",
+                "type": "query",
+                "description": "Namespace of the job"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of job versions returned"
+              },
+              {
+                "name": "next_token",
+                "value": "",
+                "type": "query",
+                "description": "Token to get the next page of job versions"
+              },
+              {
+                "name": "reverse",
+                "value": "",
+                "type": "query",
+                "description": "Reverse the order of the job versions"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "Order the job versions by the given field"
+              }
+            ]
+          },
+          "docs": "Returns the versions of a job."
+        },
+        {
+          "info": {
+            "name": "Returns a list of orchestrator nodes.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/orchestrator/nodes",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of node returned"
+              },
+              {
+                "name": "next_token",
+                "value": "",
+                "type": "query",
+                "description": "Token to get the next page of nodes"
+              },
+              {
+                "name": "reverse",
+                "value": "",
+                "type": "query",
+                "description": "Reverse the order of the nodes"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "Order the nodes by given field"
+              },
+              {
+                "name": "filter_approval",
+                "value": "",
+                "type": "query",
+                "description": "Filter Approval"
+              },
+              {
+                "name": "filter-status",
+                "value": "",
+                "type": "query",
+                "description": "Filter Status"
+              }
+            ]
+          },
+          "docs": "Returns a list of orchestrator nodes."
+        },
+        {
+          "info": {
+            "name": "Get an orchestrator node",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/orchestrator/nodes/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the orchestrator node to fetch for."
+              }
+            ]
+          },
+          "docs": "Get an orchestrator node"
+        },
+        {
+          "info": {
+            "name": "Update an orchestrator node.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/orchestrator/nodes/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the orchestrator node."
+              }
+            ]
+          },
+          "docs": "Update an orchestrator node."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
