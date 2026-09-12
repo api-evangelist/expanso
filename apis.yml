@@ -115,6 +115,8 @@ apis:
   - type: AgenticAccess
     url: agentic-access/expanso-agentic-access.yml
 common:
+- type: Website
+  url: https://www.expanso.io/
 - type: Overlay
   url: overlays/bacalhau-overlay.yaml
 - type: DeveloperPortal
