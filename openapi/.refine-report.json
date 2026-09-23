@@ -1,8 +1,7 @@
 {
   "provider": "expanso",
   "sources": [
-    "expanso-ops-api-openapi.yml",
-    "expanso-orchestrator-api-openapi.yml"
+    "_original/bacalhau-openapi-original.json"
   ],
   "outputs": [
     "expanso-ops-api-openapi.yml",
@@ -11,9 +10,17 @@
   "archived": [],
   "errors": [],
   "warnings": [
-    "expanso-ops-api-openapi.yml: info.version missing",
-    "expanso-orchestrator-api-openapi.yml: info.version missing"
+    "bacalhau-openapi-original.json: info.version missing"
   ],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "bacalhau-openapi-original.json: upgraded swagger 2.0 -> OpenAPI 3.2.0",
+    "bacalhau-openapi-original.json: declared missing tag: Ops",
+    "bacalhau-openapi-original.json: declared missing tag: Orchestrator",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "expanso-ops-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "expanso-orchestrator-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
