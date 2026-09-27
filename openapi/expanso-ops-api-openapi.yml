@@ -126,119 +126,14 @@ paths:
                 type: string
 components:
   schemas:
-    types.ComputeAuth:
-      type: object
-      properties:
-        Token:
-          description: Token specifies the key for compute nodes to be able to access the orchestrator.
-          type: string
-    types.EvaluationBroker:
-      type: object
-      properties:
-        MaxRetryCount:
-          description: MaxRetryCount specifies the maximum number of times an evaluation can be retried before being marked as failed.
-          type: integer
-        VisibilityTimeout:
-          description: VisibilityTimeout specifies how long an evaluation can be claimed before it's returned to the queue.
-          type: integer
-    types.Bacalhau:
-      type: object
-      properties:
-        API:
-          $ref: '#/components/schemas/types.API'
-        Compute:
-          $ref: '#/components/schemas/types.Compute'
-        DataDir:
-          description: DataDir specifies a location on disk where the bacalhau node will maintain state.
-          type: string
-        DisableAnalytics:
-          description: DisableAnalytics, when true, disables sharing anonymous analytics data with the Bacalhau development team
-          type: boolean
-        Engines:
-          $ref: '#/components/schemas/types.EngineConfig'
-        FeatureFlags:
-          $ref: '#/components/schemas/types.FeatureFlags'
-        InputSources:
-          $ref: '#/components/schemas/types.InputSourcesConfig'
-        JobAdmissionControl:
-          $ref: '#/components/schemas/types.JobAdmissionControl'
-        JobDefaults:
-          $ref: '#/components/schemas/types.JobDefaults'
-        Labels:
-          description: Labels are key-value pairs used to describe and categorize the nodes.
-          type: object
-          additionalProperties:
-            type: string
-        Logging:
-          $ref: '#/components/schemas/types.Logging'
-        NameProvider:
-          description: 'NameProvider specifies the method used to generate names for the node. One of: hostname, aws, gcp, uuid, puuid.'
-          type: string
-        Orchestrator:
-          $ref: '#/components/schemas/types.Orchestrator'
-        Publishers:
-          $ref: '#/components/schemas/types.PublishersConfig'
-        ResultDownloaders:
-          $ref: '#/components/schemas/types.ResultDownloaders'
-        StrictVersionMatch:
-          description: StrictVersionMatch indicates whether to enforce strict version matching.
-          type: boolean
-        UpdateConfig:
-          $ref: '#/components/schemas/types.UpdateConfig'
-        WebUI:
-          $ref: '#/components/schemas/types.WebUI'
-    types.AuthenticatorConfig:
-      type: object
-      properties:
-        PolicyPath:
-          type: string
-        Type:
-          type: string
-    types.InputSourcesTypes:
-      type: object
-      properties:
-        IPFS:
-          $ref: '#/components/schemas/types.IPFSStorage'
-    types.JobDefaults:
-      type: object
-      properties:
-        Batch:
-          $ref: '#/components/schemas/types.BatchJobDefaultsConfig'
-        Daemon:
-          $ref: '#/components/schemas/types.LongRunningJobDefaultsConfig'
-        Ops:
-          $ref: '#/components/schemas/types.BatchJobDefaultsConfig'
-        Service:
-          $ref: '#/components/schemas/types.LongRunningJobDefaultsConfig'
-    types.S3Publisher:
-      type: object
-      properties:
-        PreSignedURLDisabled:
-          description: PreSignedURLDisabled specifies whether pre-signed URLs are enabled for the S3 provider.
-          type: boolean
-        PreSignedURLExpiration:
-          description: PreSignedURLExpiration specifies the duration before a pre-signed URL expires.
-          type: integer
-    types.ResultDownloaders:
-      type: object
-      properties:
-        Disabled:
-          description: Disabled is a list of downloaders that are disabled.
-          type: array
-          items:
-            type: string
-        Timeout:
-          description: Timeout specifies the maximum time allowed for a download operation.
-          type: integer
-        Types:
-          $ref: '#/components/schemas/types.ResultDownloadersTypes'
-    types.Capability:
-      type: object
-      properties:
-        Actions:
-          type: array
-          items:
-            type: string
+    models.Protocol:
+      type: string
+      enum:
+      - ncl/v1
+      - bprotocol/v2
+      x-enum-varnames:
+      - ProtocolNCLV1
+      - ProtocolBProtocolV2
     types.AuthConfig:
       type: object
       properties:
@@ -286,6 +181,99 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/types.AuthUser'
+    apimodels.IsAliveResponse:
+      type: object
+      properties:
+        Status:
+          type: string
+    types.FeatureFlags:
+      type: object
+    types.AuthUser:
+      type: object
+      properties:
+        APIKey:
+          type: string
+        Alias:
+          type: string
+        Capabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/types.Capability'
+        Password:
+          type: string
+        Username:
+          type: string
+    types.PublishersConfig:
+      type: object
+      properties:
+        Disabled:
+          description: Disabled specifies a list of publishers that are disabled.
+          type: array
+          items:
+            type: string
+        Types:
+          $ref: '#/components/schemas/types.PublisherTypes'
+    types.Bacalhau:
+      type: object
+      properties:
+        API:
+          $ref: '#/components/schemas/types.API'
+        Compute:
+          $ref: '#/components/schemas/types.Compute'
+        DataDir:
+          description: DataDir specifies a location on disk where the bacalhau node will maintain state.
+          type: string
+        DisableAnalytics:
+          description: DisableAnalytics, when true, disables sharing anonymous analytics data with the Bacalhau development team
+          type: boolean
+        Engines:
+          $ref: '#/components/schemas/types.EngineConfig'
+        FeatureFlags:
+          $ref: '#/components/schemas/types.FeatureFlags'
+        InputSources:
+          $ref: '#/components/schemas/types.InputSourcesConfig'
+        JobAdmissionControl:
+          $ref: '#/components/schemas/types.JobAdmissionControl'
+        JobDefaults:
+          $ref: '#/components/schemas/types.JobDefaults'
+        Labels:
+          description: Labels are key-value pairs used to describe and categorize the nodes.
+          type: object
+          additionalProperties:
+            type: string
+        Logging:
+          $ref: '#/components/schemas/types.Logging'
+        NameProvider:
+          description: 'NameProvider specifies the method used to generate names for the node. One of: hostname, aws, gcp, uuid, puuid.'
+          type: string
+        Orchestrator:
+          $ref: '#/components/schemas/types.Orchestrator'
+        Publishers:
+          $ref: '#/components/schemas/types.PublishersConfig'
+        ResultDownloaders:
+          $ref: '#/components/schemas/types.ResultDownloaders'
+        StrictVersionMatch:
+          description: StrictVersionMatch indicates whether to enforce strict version matching.
+          type: boolean
+        UpdateConfig:
+          $ref: '#/components/schemas/types.UpdateConfig'
+        WebUI:
+          $ref: '#/components/schemas/types.WebUI'
+    types.OrchestratorTLS:
+      type: object
+      properties:
+        CACert:
+          description: CACert specifies the CA file path that the orchestrator node trusts when connecting to NATS server.
+          type: string
+        ServerCert:
+          description: ServerCert specifies the certificate file path given to NATS server to serve TLS connections.
+          type: string
+        ServerKey:
+          description: ServerKey specifies the private key file path given to NATS server to serve TLS connections.
+          type: string
+        ServerTimeout:
+          description: ServerTimeout specifies the TLS timeout, in seconds, set on the NATS server.
+          type: integer
     types.DockerManifestCache:
       type: object
       properties:
@@ -298,46 +286,62 @@ components:
         TTL:
           description: TTL specifies the time-to-live duration for cache entries.
           type: integer
-    models.JobSelectionDataLocality:
-      type: integer
-      format: int64
-      enum:
-      - 0
-      - 1
-      x-enum-comments:
-        Anywhere: anywhere
-        Local: local
-      x-enum-descriptions:
-      - local
-      - anywhere
-      x-enum-varnames:
-      - Local
-      - Anywhere
-    types.S3ManagedPublisher:
+    types.Logging:
       type: object
       properties:
-        Bucket:
-          description: Bucket specifies the S3 bucket name for managed publisher
+        Level:
+          description: 'Level sets the logging level. One of: trace, debug, info, warn, error, fatal, panic.'
           type: string
-        Endpoint:
-          description: Endpoint specifies an optional custom S3 endpoint
-          type: string
-        Key:
-          description: Key specifies an optional prefix for objects stored in the bucket
-          type: string
-        PreSignedURLExpiration:
-          description: PreSignedURLExpiration specifies the duration before a pre-signed URL expires.
+        LogDebugInfoInterval:
+          description: LogDebugInfoInterval specifies the interval for logging debug information.
           type: integer
-        Region:
-          description: Region specifies the region the S3 bucket is in
+        Mode:
+          description: 'Mode specifies the logging mode. One of: default, json.'
           type: string
-    types.WASM:
+    types.DefaultPublisherConfig:
       type: object
-    types.ResultDownloadersTypes:
+      properties:
+        Params:
+          description: Params specifies the publisher configuration data.
+          type: object
+          additionalProperties:
+            type: string
+        Type:
+          description: Type specifies the publisher type. e.g. "s3", "local", "ipfs", etc.
+          type: string
+    types.ResultDownloaders:
+      type: object
+      properties:
+        Disabled:
+          description: Disabled is a list of downloaders that are disabled.
+          type: array
+          items:
+            type: string
+        Timeout:
+          description: Timeout specifies the maximum time allowed for a download operation.
+          type: integer
+        Types:
+          $ref: '#/components/schemas/types.ResultDownloadersTypes'
+    types.PublisherTypes:
       type: object
       properties:
         IPFS:
-          $ref: '#/components/schemas/types.IpfsDownloader'
+          $ref: '#/components/schemas/types.IPFSPublisher'
+        Local:
+          $ref: '#/components/schemas/types.LocalPublisher'
+        S3:
+          $ref: '#/components/schemas/types.S3Publisher'
+        S3Managed:
+          $ref: '#/components/schemas/types.S3ManagedPublisher'
+    types.TaskTimeoutConfig:
+      type: object
+      properties:
+        ExecutionTimeout:
+          description: ExecutionTimeout is the maximum time allowed for task execution
+          type: integer
+        TotalTimeout:
+          description: TotalTimeout is the maximum total time allowed for a task
+          type: integer
     types.ResourcesConfig:
       type: object
       properties:
@@ -369,127 +373,11 @@ components:
 
             This value is used when the task hasn''t explicitly set its memory requirement.'
           type: string
-    types.OrchestratorTLS:
-      type: object
-      properties:
-        CACert:
-          description: CACert specifies the CA file path that the orchestrator node trusts when connecting to NATS server.
-          type: string
-        ServerCert:
-          description: ServerCert specifies the certificate file path given to NATS server to serve TLS connections.
-          type: string
-        ServerKey:
-          description: ServerKey specifies the private key file path given to NATS server to serve TLS connections.
-          type: string
-        ServerTimeout:
-          description: ServerTimeout specifies the TLS timeout, in seconds, set on the NATS server.
-          type: integer
-    types.PublisherTypes:
-      type: object
-      properties:
-        IPFS:
-          $ref: '#/components/schemas/types.IPFSPublisher'
-        Local:
-          $ref: '#/components/schemas/types.LocalPublisher'
-        S3:
-          $ref: '#/components/schemas/types.S3Publisher'
-        S3Managed:
-          $ref: '#/components/schemas/types.S3ManagedPublisher'
-    types.UpdateConfig:
-      type: object
-      properties:
-        Interval:
-          description: Interval specifies the time between update checks, when set to 0 update checks are not performed.
-          type: integer
-    types.IPFSStorage:
-      type: object
-      properties:
-        Endpoint:
-          description: Endpoint specifies the multi-address to connect to for IPFS. e.g /ip4/127.0.0.1/tcp/5001
-          type: string
-    models.Resources:
-      type: object
-      properties:
-        CPU:
-          description: CPU units
-          type: number
-        Disk:
-          description: Disk in bytes
-          type: integer
-        GPU:
-          description: GPU units
-          type: integer
-        GPUs:
-          description: GPU details
-          type: array
-          items:
-            $ref: '#/components/schemas/models.GPU'
-        Memory:
-          description: Memory in bytes
-          type: integer
-    types.IPFSPublisher:
-      type: object
-      properties:
-        Endpoint:
-          description: Endpoint specifies the multi-address to connect to for IPFS. e.g /ip4/127.0.0.1/tcp/5001
-          type: string
-    types.EngineConfig:
-      type: object
-      properties:
-        Disabled:
-          description: Disabled specifies a list of engines that are disabled.
-          type: array
-          items:
-            type: string
-        Types:
-          $ref: '#/components/schemas/types.EngineConfigTypes'
     types.IpfsDownloader:
       type: object
       properties:
         Endpoint:
           description: Endpoint specifies the multi-address to connect to for IPFS. e.g /ip4/127.0.0.1/tcp/5001
-          type: string
-    types.EnvConfig:
-      type: object
-      properties:
-        AllowList:
-          description: 'AllowList specifies which host environment variables can be forwarded to jobs.
-
-            Supports glob patterns (e.g., "AWS_*", "API_*")'
-          type: array
-          items:
-            type: string
-    types.PublishersConfig:
-      type: object
-      properties:
-        Disabled:
-          description: Disabled specifies a list of publishers that are disabled.
-          type: array
-          items:
-            type: string
-        Types:
-          $ref: '#/components/schemas/types.PublisherTypes'
-    types.BatchJobDefaultsConfig:
-      type: object
-      properties:
-        Priority:
-          description: 'Priority specifies the default priority allocated to a batch or ops job.
-
-            This value is used when the job hasn''t explicitly set its priority requirement.'
-          type: integer
-        Task:
-          $ref: '#/components/schemas/types.BatchTaskDefaultConfig'
-    types.Logging:
-      type: object
-      properties:
-        Level:
-          description: 'Level sets the logging level. One of: trace, debug, info, warn, error, fatal, panic.'
-          type: string
-        LogDebugInfoInterval:
-          description: LogDebugInfoInterval specifies the interval for logging debug information.
-          type: integer
-        Mode:
-          description: 'Mode specifies the logging mode. One of: default, json.'
           type: string
     models.NodeType:
       type: integer
@@ -501,20 +389,64 @@ components:
       - nodeTypeUndefined
       - NodeTypeRequester
       - NodeTypeCompute
-    types.NodeManager:
+    types.EnvConfig:
       type: object
       properties:
-        DisconnectTimeout:
-          description: DisconnectTimeout specifies how long to wait before considering a node disconnected.
-          type: integer
-        ManualApproval:
-          description: ManualApproval, if true, requires manual approval for new compute nodes joining the cluster.
-          type: boolean
-    apimodels.IsAliveResponse:
+        AllowList:
+          description: 'AllowList specifies which host environment variables can be forwarded to jobs.
+
+            Supports glob patterns (e.g., "AWS_*", "API_*")'
+          type: array
+          items:
+            type: string
+    types.WebUI:
       type: object
       properties:
-        Status:
+        Backend:
+          description: 'Backend specifies the address and port of the backend API server.
+
+            If empty, the Web UI will use the same address and port as the API server.'
           type: string
+        Enabled:
+          description: Enabled indicates whether the Web UI is enabled.
+          type: boolean
+        Listen:
+          description: Listen specifies the address and port on which the Web UI listens.
+          type: string
+    types.BatchJobDefaultsConfig:
+      type: object
+      properties:
+        Priority:
+          description: 'Priority specifies the default priority allocated to a batch or ops job.
+
+            This value is used when the job hasn''t explicitly set its priority requirement.'
+          type: integer
+        Task:
+          $ref: '#/components/schemas/types.BatchTaskDefaultConfig'
+    types.S3ManagedPublisher:
+      type: object
+      properties:
+        Bucket:
+          description: Bucket specifies the S3 bucket name for managed publisher
+          type: string
+        Endpoint:
+          description: Endpoint specifies an optional custom S3 endpoint
+          type: string
+        Key:
+          description: Key specifies an optional prefix for objects stored in the bucket
+          type: string
+        PreSignedURLExpiration:
+          description: PreSignedURLExpiration specifies the duration before a pre-signed URL expires.
+          type: integer
+        Region:
+          description: Region specifies the region the S3 bucket is in
+          type: string
+    models.DebugInfo:
+      type: object
+      properties:
+        component:
+          type: string
+        info: {}
     types.TLS:
       type: object
       properties:
@@ -542,6 +474,234 @@ components:
         UseTLS:
           description: UseTLS indicates whether to use TLS for client connections.
           type: boolean
+    types.WASM:
+      type: object
+    types.EvaluationBroker:
+      type: object
+      properties:
+        MaxRetryCount:
+          description: MaxRetryCount specifies the maximum number of times an evaluation can be retried before being marked as failed.
+          type: integer
+        VisibilityTimeout:
+          description: VisibilityTimeout specifies how long an evaluation can be claimed before it's returned to the queue.
+          type: integer
+    types.Capability:
+      type: object
+      properties:
+        Actions:
+          type: array
+          items:
+            type: string
+    types.Docker:
+      type: object
+      properties:
+        ManifestCache:
+          description: ManifestCache specifies the settings for the Docker manifest cache.
+          allOf:
+          - $ref: '#/components/schemas/types.DockerManifestCache'
+    types.BatchTaskDefaultConfig:
+      type: object
+      properties:
+        Publisher:
+          $ref: '#/components/schemas/types.DefaultPublisherConfig'
+        Resources:
+          $ref: '#/components/schemas/types.ResourcesConfig'
+        Timeouts:
+          $ref: '#/components/schemas/types.TaskTimeoutConfig'
+    types.Cluster:
+      type: object
+      properties:
+        Advertise:
+          description: Advertise specifies the address to advertise to other cluster members.
+          type: string
+        Host:
+          description: Host specifies the hostname or IP address for cluster communication.
+          type: string
+        Name:
+          description: Name specifies the unique identifier for this orchestrator cluster.
+          type: string
+        Peers:
+          description: Peers is a list of other cluster members to connect to on startup.
+          type: array
+          items:
+            type: string
+        Port:
+          description: Port specifies the port number for cluster communication.
+          type: integer
+    apimodels.GetAgentNodeAuthConfigResponse:
+      type: object
+      properties:
+        config:
+          $ref: '#/components/schemas/types.Oauth2Config'
+        version:
+          type: string
+    models.GPU:
+      type: object
+      properties:
+        index:
+          description: Self-reported index of the device in the system
+          type: integer
+          format: int64
+        memory:
+          description: Total GPU memory in mebibytes (MiB)
+          type: integer
+          format: int64
+        name:
+          description: Model name of the GPU e.g. Tesla T4
+          type: string
+        pciaddress:
+          description: 'PCI address of the device, in the format AAAA:BB:CC.C
+
+            Used to discover the correct device rendering cards'
+          type: string
+        vendor:
+          description: Maker of the GPU, e.g. NVidia, AMD, Intel
+          allOf:
+          - $ref: '#/components/schemas/models.GPUVendor'
+    types.InputSourcesTypes:
+      type: object
+      properties:
+        IPFS:
+          $ref: '#/components/schemas/types.IPFSStorage'
+    types.NodeManager:
+      type: object
+      properties:
+        DisconnectTimeout:
+          description: DisconnectTimeout specifies how long to wait before considering a node disconnected.
+          type: integer
+        ManualApproval:
+          description: ManualApproval, if true, requires manual approval for new compute nodes joining the cluster.
+          type: boolean
+    types.Orchestrator:
+      type: object
+      properties:
+        Advertise:
+          description: Advertise specifies URL to advertise to other servers.
+          type: string
+        Auth:
+          description: Auth specifies the authentication configuration for compute nodes to connect to the orchestrator.
+          allOf:
+          - $ref: '#/components/schemas/types.OrchestratorAuth'
+        Cluster:
+          $ref: '#/components/schemas/types.Cluster'
+        Enabled:
+          description: Enabled indicates whether the orchestrator node is active and available for job submission.
+          type: boolean
+        EvaluationBroker:
+          $ref: '#/components/schemas/types.EvaluationBroker'
+        Host:
+          description: Host specifies the hostname or IP address on which the Orchestrator server listens for compute node connections.
+          type: string
+        NodeManager:
+          $ref: '#/components/schemas/types.NodeManager'
+        Port:
+          description: Host specifies the port number on which the Orchestrator server listens for compute node connections.
+          type: integer
+        Scheduler:
+          $ref: '#/components/schemas/types.Scheduler'
+        SupportReverseProxy:
+          description: SupportReverseProxy configures the orchestrator node to run behind a reverse proxy
+          type: boolean
+        TLS:
+          description: TLS specifies the TLS related configuration on the orchestrator for when compute nodes need to connect.
+          allOf:
+          - $ref: '#/components/schemas/types.OrchestratorTLS'
+    types.Heartbeat:
+      type: object
+      properties:
+        InfoUpdateInterval:
+          description: InfoUpdateInterval specifies the time between updates of non-resource information to the orchestrator.
+          type: integer
+        Interval:
+          description: Interval specifies the time between heartbeat signals sent to the orchestrator.
+          type: integer
+        ResourceUpdateInterval:
+          description: 'Deprecated: use Interval instead'
+          type: integer
+    types.LongRunningTaskDefaultConfig:
+      type: object
+      properties:
+        Resources:
+          $ref: '#/components/schemas/types.ResourcesConfig'
+    models.GPUVendor:
+      type: string
+      enum:
+      - NVIDIA
+      - AMD/ATI
+      - Intel
+      x-enum-varnames:
+      - GPUVendorNvidia
+      - GPUVendorAMDATI
+      - GPUVendorIntel
+    types.LocalPublisher:
+      type: object
+      properties:
+        Address:
+          description: Address specifies the endpoint the publisher serves on.
+          type: string
+        Port:
+          description: Port specifies the port the publisher serves on.
+          type: integer
+    types.Oauth2Config:
+      type: object
+      properties:
+        Audience:
+          type: string
+        DeviceAuthorizationEndpoint:
+          type: string
+        DeviceClientID:
+          type: string
+        Issuer:
+          type: string
+        JWKSUri:
+          type: string
+        PollingInterval:
+          type: integer
+        ProviderID:
+          type: string
+        ProviderName:
+          type: string
+        Scopes:
+          type: array
+          items:
+            type: string
+        TokenEndpoint:
+          type: string
+    types.AuthenticatorConfig:
+      type: object
+      properties:
+        PolicyPath:
+          type: string
+        Type:
+          type: string
+    types.JobAdmissionControl:
+      type: object
+      properties:
+        Locality:
+          description: Locality specifies the locality of the job input data.
+          allOf:
+          - $ref: '#/components/schemas/models.JobSelectionDataLocality'
+        ProbeExec:
+          description: ProbeExec specifies the command to execute for probing job submission.
+          type: string
+        ProbeHTTP:
+          description: ProbeHTTP specifies the HTTP endpoint for probing job submission.
+          type: string
+        RejectNetworkedJobs:
+          description: RejectNetworkedJobs indicates whether to reject jobs that require network access.
+          type: boolean
+        RejectStatelessJobs:
+          description: RejectStatelessJobs indicates whether to reject stateless jobs, i.e. jobs without inputs.
+          type: boolean
+    types.S3Publisher:
+      type: object
+      properties:
+        PreSignedURLDisabled:
+          description: PreSignedURLDisabled specifies whether pre-signed URLs are enabled for the S3 provider.
+          type: boolean
+        PreSignedURLExpiration:
+          description: PreSignedURLExpiration specifies the duration before a pre-signed URL expires.
+          type: integer
     models.ComputeNodeInfo:
       type: object
       properties:
@@ -574,44 +734,25 @@ components:
 
             Format: IPv4 or hostname (e.g., "192.168.1.100" or "node1.example.com")'
           type: string
-    types.JobAdmissionControl:
+    models.Resources:
       type: object
       properties:
-        Locality:
-          description: Locality specifies the locality of the job input data.
-          allOf:
-          - $ref: '#/components/schemas/models.JobSelectionDataLocality'
-        ProbeExec:
-          description: ProbeExec specifies the command to execute for probing job submission.
-          type: string
-        ProbeHTTP:
-          description: ProbeHTTP specifies the HTTP endpoint for probing job submission.
-          type: string
-        RejectNetworkedJobs:
-          description: RejectNetworkedJobs indicates whether to reject jobs that require network access.
-          type: boolean
-        RejectStatelessJobs:
-          description: RejectStatelessJobs indicates whether to reject stateless jobs, i.e. jobs without inputs.
-          type: boolean
-    types.Cluster:
-      type: object
-      properties:
-        Advertise:
-          description: Advertise specifies the address to advertise to other cluster members.
-          type: string
-        Host:
-          description: Host specifies the hostname or IP address for cluster communication.
-          type: string
-        Name:
-          description: Name specifies the unique identifier for this orchestrator cluster.
-          type: string
-        Peers:
-          description: Peers is a list of other cluster members to connect to on startup.
+        CPU:
+          description: CPU units
+          type: number
+        Disk:
+          description: Disk in bytes
+          type: integer
+        GPU:
+          description: GPU units
+          type: integer
+        GPUs:
+          description: GPU details
           type: array
           items:
-            type: string
-        Port:
-          description: Port specifies the port number for cluster communication.
+            $ref: '#/components/schemas/models.GPU'
+        Memory:
+          description: Memory in bytes
           type: integer
     types.API:
       type: object
@@ -626,34 +767,127 @@ components:
           type: integer
         TLS:
           $ref: '#/components/schemas/types.TLS'
-    types.BatchTaskDefaultConfig:
+    types.IPFSStorage:
       type: object
       properties:
-        Publisher:
-          $ref: '#/components/schemas/types.DefaultPublisherConfig'
-        Resources:
-          $ref: '#/components/schemas/types.ResourcesConfig'
-        Timeouts:
-          $ref: '#/components/schemas/types.TaskTimeoutConfig'
-    types.OrchestratorAuth:
-      type: object
-      properties:
-        Token:
-          description: Token specifies the key for compute nodes to be able to access the orchestrator
+        Endpoint:
+          description: Endpoint specifies the multi-address to connect to for IPFS. e.g /ip4/127.0.0.1/tcp/5001
           type: string
-    types.WebUI:
+    types.UpdateConfig:
       type: object
       properties:
-        Backend:
-          description: 'Backend specifies the address and port of the backend API server.
+        Interval:
+          description: Interval specifies the time between update checks, when set to 0 update checks are not performed.
+          type: integer
+    apimodels.GetVersionResponse:
+      type: object
+      properties:
+        BuildDate:
+          type: string
+          example: '2022-11-16T14:03:31Z'
+        GOARCH:
+          type: string
+          example: amd64
+        GOOS:
+          type: string
+          example: linux
+        GitCommit:
+          type: string
+          example: d612b63108f2b5ce1ab2b9e02444eb1dac1d922d
+        GitVersion:
+          type: string
+          example: v0.3.12
+        Major:
+          type: string
+          example: '0'
+        Minor:
+          type: string
+          example: '3'
+    models.BuildVersionInfo:
+      type: object
+      properties:
+        BuildDate:
+          type: string
+          example: '2022-11-16T14:03:31Z'
+        GOARCH:
+          type: string
+          example: amd64
+        GOOS:
+          type: string
+          example: linux
+        GitCommit:
+          type: string
+          example: d612b63108f2b5ce1ab2b9e02444eb1dac1d922d
+        GitVersion:
+          type: string
+          example: v0.3.12
+        Major:
+          type: string
+          example: '0'
+        Minor:
+          type: string
+          example: '3'
+    types.JobDefaults:
+      type: object
+      properties:
+        Batch:
+          $ref: '#/components/schemas/types.BatchJobDefaultsConfig'
+        Daemon:
+          $ref: '#/components/schemas/types.LongRunningJobDefaultsConfig'
+        Ops:
+          $ref: '#/components/schemas/types.BatchJobDefaultsConfig'
+        Service:
+          $ref: '#/components/schemas/types.LongRunningJobDefaultsConfig'
+    types.InputSourcesConfig:
+      type: object
+      properties:
+        Disabled:
+          description: Disabled specifies a list of storages that are disabled.
+          type: array
+          items:
+            type: string
+        MaxRetryCount:
+          description: ReadTimeout specifies the maximum number of attempts for reading from a storage.
+          type: integer
+        ReadTimeout:
+          description: ReadTimeout specifies the maximum time allowed for reading from a storage.
+          type: integer
+        Types:
+          $ref: '#/components/schemas/types.InputSourcesTypes'
+    types.LongRunningJobDefaultsConfig:
+      type: object
+      properties:
+        Priority:
+          description: 'Priority specifies the default priority allocated to a service or daemon job.
 
-            If empty, the Web UI will use the same address and port as the API server.'
+            This value is used when the job hasn''t explicitly set its priority requirement.'
+          type: integer
+        Task:
+          $ref: '#/components/schemas/types.LongRunningTaskDefaultConfig'
+    types.ResourceScaler:
+      type: object
+      properties:
+        CPU:
+          description: 'CPU specifies the amount of CPU a compute node allocates for running jobs.
+
+            It can be expressed as a percentage (e.g., "85%") or a Kubernetes resource string (e.g., "100m").'
           type: string
-        Enabled:
-          description: Enabled indicates whether the Web UI is enabled.
-          type: boolean
-        Listen:
-          description: Listen specifies the address and port on which the Web UI listens.
+        Disk:
+          description: 'Disk specifies the amount of Disk space a compute node allocates for running jobs.
+
+            It can be expressed as a percentage (e.g., "85%") or a Kubernetes resource string (e.g., "10Gi").'
+          type: string
+        GPU:
+          description: 'GPU specifies the amount of GPU a compute node allocates for running jobs.
+
+            It can be expressed as a percentage (e.g., "85%") or a Kubernetes resource string (e.g., "1").
+
+            Note: When using percentages, the result is always rounded up to the nearest whole GPU.'
+          type: string
+        Memory:
+          description: 'Memory specifies the amount of Memory a compute node allocates for running jobs.
+
+            It can be expressed as a percentage (e.g., "85%") or a Kubernetes resource string (e.g., "1Gi").'
           type: string
     types.Compute:
       type: object
@@ -691,84 +925,30 @@ components:
           description: TLS specifies the TLS related configuration on the compute node when connecting with the orchestrator.
           allOf:
           - $ref: '#/components/schemas/types.ComputeTLS'
-    types.NetworkConfig:
-      type: object
-      properties:
-        AdvertisedAddress:
-          description: 'AdvertisedAddress is the address that this compute node advertises to other nodes.
-
-            If empty, a default address will be auto-discovered.'
-          type: string
-        PortRangeEnd:
-          description: PortRangeEnd is the last port in the range (inclusive) that can be allocated to jobs
-          type: integer
-        PortRangeStart:
-          description: PortRangeStart is the first port in the range (inclusive) that can be allocated to jobs
-          type: integer
-    types.EngineConfigTypes:
-      type: object
-      properties:
-        Docker:
-          $ref: '#/components/schemas/types.Docker'
-        WASM:
-          $ref: '#/components/schemas/types.WASM'
-    models.Protocol:
-      type: string
-      enum:
-      - ncl/v1
-      - bprotocol/v2
-      x-enum-varnames:
-      - ProtocolNCLV1
-      - ProtocolBProtocolV2
-    types.TaskTimeoutConfig:
-      type: object
-      properties:
-        ExecutionTimeout:
-          description: ExecutionTimeout is the maximum time allowed for task execution
-          type: integer
-        TotalTimeout:
-          description: TotalTimeout is the maximum total time allowed for a task
-          type: integer
-    types.InputSourcesConfig:
+    types.EngineConfig:
       type: object
       properties:
         Disabled:
-          description: Disabled specifies a list of storages that are disabled.
+          description: Disabled specifies a list of engines that are disabled.
           type: array
           items:
             type: string
-        MaxRetryCount:
-          description: ReadTimeout specifies the maximum number of attempts for reading from a storage.
-          type: integer
-        ReadTimeout:
-          description: ReadTimeout specifies the maximum time allowed for reading from a storage.
-          type: integer
         Types:
-          $ref: '#/components/schemas/types.InputSourcesTypes'
-    types.Oauth2Config:
+          $ref: '#/components/schemas/types.EngineConfigTypes'
+    types.ComputeTLS:
       type: object
       properties:
-        Audience:
+        CACert:
+          description: CACert specifies the CA file path that the compute node trusts when connecting to orchestrator.
           type: string
-        DeviceAuthorizationEndpoint:
-          type: string
-        DeviceClientID:
-          type: string
-        Issuer:
-          type: string
-        JWKSUri:
-          type: string
-        PollingInterval:
-          type: integer
-        ProviderID:
-          type: string
-        ProviderName:
-          type: string
-        Scopes:
-          type: array
-          items:
-            type: string
-        TokenEndpoint:
+        RequireTLS:
+          description: RequireTLS specifies if the compute node enforces encrypted communication with orchestrator.
+          type: boolean
+    types.OrchestratorAuth:
+      type: object
+      properties:
+        Token:
+          description: Token specifies the key for compute nodes to be able to access the orchestrator
           type: string
     types.Scheduler:
       type: object
@@ -785,118 +965,39 @@ components:
         WorkerCount:
           description: WorkerCount specifies the number of concurrent workers for job scheduling.
           type: integer
-    types.ComputeTLS:
+    types.IPFSPublisher:
       type: object
       properties:
-        CACert:
-          description: CACert specifies the CA file path that the compute node trusts when connecting to orchestrator.
+        Endpoint:
+          description: Endpoint specifies the multi-address to connect to for IPFS. e.g /ip4/127.0.0.1/tcp/5001
           type: string
-        RequireTLS:
-          description: RequireTLS specifies if the compute node enforces encrypted communication with orchestrator.
-          type: boolean
-    types.Heartbeat:
+    types.EngineConfigTypes:
       type: object
       properties:
-        InfoUpdateInterval:
-          description: InfoUpdateInterval specifies the time between updates of non-resource information to the orchestrator.
-          type: integer
-        Interval:
-          description: Interval specifies the time between heartbeat signals sent to the orchestrator.
-          type: integer
-        ResourceUpdateInterval:
-          description: 'Deprecated: use Interval instead'
-          type: integer
-    apimodels.GetVersionResponse:
-      type: object
-      properties:
-        BuildDate:
-          type: string
-          example: '2022-11-16T14:03:31Z'
-        GOARCH:
-          type: string
-          example: amd64
-        GOOS:
-          type: string
-          example: linux
-        GitCommit:
-          type: string
-          example: d612b63108f2b5ce1ab2b9e02444eb1dac1d922d
-        GitVersion:
-          type: string
-          example: v0.3.12
-        Major:
-          type: string
-          example: '0'
-        Minor:
-          type: string
-          example: '3'
-    models.DebugInfo:
-      type: object
-      properties:
-        component:
-          type: string
-        info: {}
-    models.GPUVendor:
-      type: string
+        Docker:
+          $ref: '#/components/schemas/types.Docker'
+        WASM:
+          $ref: '#/components/schemas/types.WASM'
+    models.JobSelectionDataLocality:
+      type: integer
+      format: int64
       enum:
-      - NVIDIA
-      - AMD/ATI
-      - Intel
+      - 0
+      - 1
+      x-enum-comments:
+        Anywhere: anywhere
+        Local: local
+      x-enum-descriptions:
+      - local
+      - anywhere
       x-enum-varnames:
-      - GPUVendorNvidia
-      - GPUVendorAMDATI
-      - GPUVendorIntel
-    types.ResourceScaler:
+      - Local
+      - Anywhere
+    types.ResultDownloadersTypes:
       type: object
       properties:
-        CPU:
-          description: 'CPU specifies the amount of CPU a compute node allocates for running jobs.
-
-            It can be expressed as a percentage (e.g., "85%") or a Kubernetes resource string (e.g., "100m").'
-          type: string
-        Disk:
-          description: 'Disk specifies the amount of Disk space a compute node allocates for running jobs.
-
-            It can be expressed as a percentage (e.g., "85%") or a Kubernetes resource string (e.g., "10Gi").'
-          type: string
-        GPU:
-          description: 'GPU specifies the amount of GPU a compute node allocates for running jobs.
-
-            It can be expressed as a percentage (e.g., "85%") or a Kubernetes resource string (e.g., "1").
-
-            Note: When using percentages, the result is always rounded up to the nearest whole GPU.'
-          type: string
-        Memory:
-          description: 'Memory specifies the amount of Memory a compute node allocates for running jobs.
-
-            It can be expressed as a percentage (e.g., "85%") or a Kubernetes resource string (e.g., "1Gi").'
-          type: string
-    types.FeatureFlags:
-      type: object
-    models.BuildVersionInfo:
-      type: object
-      properties:
-        BuildDate:
-          type: string
-          example: '2022-11-16T14:03:31Z'
-        GOARCH:
-          type: string
-          example: amd64
-        GOOS:
-          type: string
-          example: linux
-        GitCommit:
-          type: string
-          example: d612b63108f2b5ce1ab2b9e02444eb1dac1d922d
-        GitVersion:
-          type: string
-          example: v0.3.12
-        Major:
-          type: string
-          example: '0'
-        Minor:
-          type: string
-          example: '3'
+        IPFS:
+          $ref: '#/components/schemas/types.IpfsDownloader'
     models.NodeInfo:
       type: object
       properties:
@@ -917,124 +1018,23 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/models.Protocol'
-    apimodels.GetAgentNodeAuthConfigResponse:
+    types.ComputeAuth:
       type: object
       properties:
-        config:
-          $ref: '#/components/schemas/types.Oauth2Config'
-        version:
+        Token:
+          description: Token specifies the key for compute nodes to be able to access the orchestrator.
           type: string
-    models.GPU:
+    types.NetworkConfig:
       type: object
       properties:
-        index:
-          description: Self-reported index of the device in the system
-          type: integer
-          format: int64
-        memory:
-          description: Total GPU memory in mebibytes (MiB)
-          type: integer
-          format: int64
-        name:
-          description: Model name of the GPU e.g. Tesla T4
-          type: string
-        pciaddress:
-          description: 'PCI address of the device, in the format AAAA:BB:CC.C
+        AdvertisedAddress:
+          description: 'AdvertisedAddress is the address that this compute node advertises to other nodes.
 
-            Used to discover the correct device rendering cards'
+            If empty, a default address will be auto-discovered.'
           type: string
-        vendor:
-          description: Maker of the GPU, e.g. NVidia, AMD, Intel
-          allOf:
-          - $ref: '#/components/schemas/models.GPUVendor'
-    types.Orchestrator:
-      type: object
-      properties:
-        Advertise:
-          description: Advertise specifies URL to advertise to other servers.
-          type: string
-        Auth:
-          description: Auth specifies the authentication configuration for compute nodes to connect to the orchestrator.
-          allOf:
-          - $ref: '#/components/schemas/types.OrchestratorAuth'
-        Cluster:
-          $ref: '#/components/schemas/types.Cluster'
-        Enabled:
-          description: Enabled indicates whether the orchestrator node is active and available for job submission.
-          type: boolean
-        EvaluationBroker:
-          $ref: '#/components/schemas/types.EvaluationBroker'
-        Host:
-          description: Host specifies the hostname or IP address on which the Orchestrator server listens for compute node connections.
-          type: string
-        NodeManager:
-          $ref: '#/components/schemas/types.NodeManager'
-        Port:
-          description: Host specifies the port number on which the Orchestrator server listens for compute node connections.
+        PortRangeEnd:
+          description: PortRangeEnd is the last port in the range (inclusive) that can be allocated to jobs
           type: integer
-        Scheduler:
-          $ref: '#/components/schemas/types.Scheduler'
-        SupportReverseProxy:
-          description: SupportReverseProxy configures the orchestrator node to run behind a reverse proxy
-          type: boolean
-        TLS:
-          description: TLS specifies the TLS related configuration on the orchestrator for when compute nodes need to connect.
-          allOf:
-          - $ref: '#/components/schemas/types.OrchestratorTLS'
-    types.LongRunningTaskDefaultConfig:
-      type: object
-      properties:
-        Resources:
-          $ref: '#/components/schemas/types.ResourcesConfig'
-    types.DefaultPublisherConfig:
-      type: object
-      properties:
-        Params:
-          description: Params specifies the publisher configuration data.
-          type: object
-          additionalProperties:
-            type: string
-        Type:
-          description: Type specifies the publisher type. e.g. "s3", "local", "ipfs", etc.
-          type: string
-    types.LocalPublisher:
-      type: object
-      properties:
-        Address:
-          description: Address specifies the endpoint the publisher serves on.
-          type: string
-        Port:
-          description: Port specifies the port the publisher serves on.
+        PortRangeStart:
+          description: PortRangeStart is the first port in the range (inclusive) that can be allocated to jobs
           type: integer
-    types.Docker:
-      type: object
-      properties:
-        ManifestCache:
-          description: ManifestCache specifies the settings for the Docker manifest cache.
-          allOf:
-          - $ref: '#/components/schemas/types.DockerManifestCache'
-    types.AuthUser:
-      type: object
-      properties:
-        APIKey:
-          type: string
-        Alias:
-          type: string
-        Capabilities:
-          type: array
-          items:
-            $ref: '#/components/schemas/types.Capability'
-        Password:
-          type: string
-        Username:
-          type: string
-    types.LongRunningJobDefaultsConfig:
-      type: object
-      properties:
-        Priority:
-          description: 'Priority specifies the default priority allocated to a service or daemon job.
-
-            This value is used when the job hasn''t explicitly set its priority requirement.'
-          type: integer
-        Task:
-          $ref: '#/components/schemas/types.LongRunningTaskDefaultConfig'

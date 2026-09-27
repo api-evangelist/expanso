@@ -52,7 +52,7 @@ tags:
 - Compute Orchestration
 - Data Pipeline
 - Data Governance
-- Open-Source
+- Open Source
 - Artificial Intelligence
 - Job Orchestration
 tags_raw:
@@ -65,6 +65,7 @@ tags_raw:
 - Open Source
 - AI
 - Job Orchestration
+- Open-Source
 apis:
 - aid: expanso:expanso-ops-api
   name: Expanso Ops API
