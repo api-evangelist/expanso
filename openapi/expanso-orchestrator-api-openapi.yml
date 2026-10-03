@@ -656,6 +656,76 @@ paths:
         required: true
 components:
   schemas:
+    apimodels.GetNodeResponse:
+      type: object
+      properties:
+        Node:
+          $ref: '#/components/schemas/models.NodeState'
+    models.ExecutionStateType:
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      x-enum-comments:
+        ExecutionStateBidAccepted: aka running
+      x-enum-descriptions:
+      - ''
+      - ''
+      - ''
+      - ''
+      - ''
+      - aka running
+      - ''
+      - ''
+      - ''
+      - ''
+      - ''
+      - ''
+      x-enum-varnames:
+      - ExecutionStateUndefined
+      - ExecutionStateNew
+      - ExecutionStateAskForBid
+      - ExecutionStateAskForBidAccepted
+      - ExecutionStateAskForBidRejected
+      - ExecutionStateBidAccepted
+      - ExecutionStateRunning
+      - ExecutionStatePublishing
+      - ExecutionStateBidRejected
+      - ExecutionStateCompleted
+      - ExecutionStateFailed
+      - ExecutionStateCancelled
+    models.ExecutionLog:
+      type: object
+      properties:
+        line:
+          type: string
+        type:
+          $ref: '#/components/schemas/models.ExecutionLogType'
+    models.State-models_ExecutionDesiredStateType:
+      type: object
+      properties:
+        Details:
+          description: Details is a map of additional details about the state.
+          type: object
+          additionalProperties:
+            type: string
+        Message:
+          description: Message is a human readable message describing the state.
+          type: string
+        StateType:
+          description: StateType is the current state of the object.
+          allOf:
+          - $ref: '#/components/schemas/models.ExecutionDesiredStateType'
     models.JobStateType:
       type: integer
       enum:
@@ -674,14 +744,308 @@ components:
       - JobStateTypeCompleted
       - JobStateTypeFailed
       - JobStateTypeStopped
-    models.Protocol:
+    models.NodeType:
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      x-enum-varnames:
+      - nodeTypeUndefined
+      - NodeTypeRequester
+      - NodeTypeCompute
+    models.ResultPath:
+      type: object
+      properties:
+        Name:
+          description: Name
+          type: string
+        Path:
+          description: The path to the file/dir
+          type: string
+    apimodels.ListJobExecutionsResponse:
+      type: object
+      properties:
+        Items:
+          type: array
+          items:
+            $ref: '#/components/schemas/models.Execution'
+        NextToken:
+          type: string
+    apimodels.ListJobVersionsResponse:
+      type: object
+      properties:
+        Items:
+          type: array
+          items:
+            $ref: '#/components/schemas/models.Job'
+        NextToken:
+          type: string
+    models.NetworkConfig:
+      type: object
+      properties:
+        Domains:
+          type: array
+          items:
+            type: string
+        Ports:
+          type: array
+          items:
+            $ref: '#/components/schemas/models.Port'
+        Type:
+          $ref: '#/components/schemas/models.Network'
+    models.GPU:
+      type: object
+      properties:
+        index:
+          description: Self-reported index of the device in the system
+          type: integer
+          format: int64
+        memory:
+          description: Total GPU memory in mebibytes (MiB)
+          type: integer
+          format: int64
+        name:
+          description: Model name of the GPU e.g. Tesla T4
+          type: string
+        pciaddress:
+          description: 'PCI address of the device, in the format AAAA:BB:CC.C
+
+            Used to discover the correct device rendering cards'
+          type: string
+        vendor:
+          description: Maker of the GPU, e.g. NVidia, AMD, Intel
+          allOf:
+          - $ref: '#/components/schemas/models.GPUVendor'
+    apimodels.RerunJobResponse:
+      type: object
+      properties:
+        EvaluationID:
+          type: string
+        JobID:
+          type: string
+        JobVersion:
+          type: integer
+        Warnings:
+          type: array
+          items:
+            type: string
+    apimodels.RerunJobRequest:
+      type: object
+      properties:
+        JobVersion:
+          type: integer
+        Reason:
+          type: string
+        credential:
+          $ref: '#/components/schemas/apimodels.HTTPCredential'
+        idempotencyToken:
+          type: string
+        namespace:
+          type: string
+    models.RunCommandResult:
+      type: object
+      properties:
+        ErrorMsg:
+          description: Runner error
+          type: string
+        ExitCode:
+          description: exit code of the run.
+          type: integer
+        StderrTruncated:
+          description: bool describing if stderr was truncated
+          type: boolean
+        Stdout:
+          description: stdout of the run. Yaml provided for `describe` output
+          type: string
+        StdoutTruncated:
+          description: bool describing if stdout was truncated
+          type: boolean
+        stderr:
+          description: stderr of the run.
+          type: string
+    models.AllocatedResources:
+      type: object
+      properties:
+        Tasks:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/models.Resources'
+    models.SpecConfig:
+      type: object
+      properties:
+        Params:
+          description: Params is a map of the config params
+          type: object
+          additionalProperties: true
+        Type:
+          description: Type of the config
+          type: string
+    apimodels.ListNodesResponse:
+      type: object
+      properties:
+        NextToken:
+          type: string
+        Nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/models.NodeState'
+    models.ExecutionDesiredStateType:
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      x-enum-varnames:
+      - ExecutionDesiredStatePending
+      - ExecutionDesiredStateRunning
+      - ExecutionDesiredStateStopped
+    selection.Operator:
       type: string
       enum:
-      - ncl/v1
-      - bprotocol/v2
+      - '!'
+      - '='
+      - ==
+      - in
+      - '!='
+      - notin
+      - exists
+      - gt
+      - lt
       x-enum-varnames:
-      - ProtocolNCLV1
-      - ProtocolBProtocolV2
+      - DoesNotExist
+      - Equals
+      - DoubleEquals
+      - In
+      - NotEquals
+      - NotIn
+      - Exists
+      - GreaterThan
+      - LessThan
+    models.StateChange-models_JobStateType:
+      type: object
+      properties:
+        New:
+          $ref: '#/components/schemas/models.JobStateType'
+        Previous:
+          $ref: '#/components/schemas/models.JobStateType'
+    apimodels.ListJobResultsResponse:
+      type: object
+      properties:
+        Items:
+          type: array
+          items:
+            $ref: '#/components/schemas/models.SpecConfig'
+        NextToken:
+          type: string
+    models.InputSource:
+      type: object
+      properties:
+        Alias:
+          description: 'Alias is an optional reference to this input source that can be used for
+
+            dynamic linking to this input. (e.g. dynamic import in wasm by alias)'
+          type: string
+        Source:
+          description: Source is the source of the artifact to be downloaded, e.g a URL, S3 bucket, etc.
+          allOf:
+          - $ref: '#/components/schemas/models.SpecConfig'
+        Target:
+          description: Target is the path where the artifact should be mounted on
+          type: string
+    models.Network:
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      x-enum-varnames:
+      - NetworkDefault
+      - NetworkNone
+      - NetworkHost
+      - NetworkFull
+      - NetworkHTTP
+      - NetworkBridge
+    models.ResourcesConfig:
+      type: object
+      properties:
+        CPU:
+          description: CPU https://github.com/BTBurke/k8sresource string
+          type: string
+        Disk:
+          description: Memory github.com/dustin/go-humanize string
+          type: string
+        GPU:
+          type: string
+        Memory:
+          description: Memory github.com/dustin/go-humanize string
+          type: string
+    models.State-models_JobStateType:
+      type: object
+      properties:
+        Details:
+          description: Details is a map of additional details about the state.
+          type: object
+          additionalProperties:
+            type: string
+        Message:
+          description: Message is a human readable message describing the state.
+          type: string
+        StateType:
+          description: StateType is the current state of the object.
+          allOf:
+          - $ref: '#/components/schemas/models.JobStateType'
+    apimodels.PutJobRequest:
+      type: object
+      properties:
+        Force:
+          type: boolean
+        Job:
+          $ref: '#/components/schemas/models.Job'
+        credential:
+          $ref: '#/components/schemas/apimodels.HTTPCredential'
+        idempotencyToken:
+          type: string
+        namespace:
+          type: string
+    models.ExecutionLogType:
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      x-enum-varnames:
+      - executionLogTypeUnknown
+      - ExecutionLogTypeSTDOUT
+      - ExecutionLogTypeSTDERR
+    apimodels.StopJobResponse:
+      type: object
+      properties:
+        EvaluationID:
+          type: string
+    apimodels.HTTPCredential:
+      type: object
+      properties:
+        params:
+          description: 'For authorization schemes that provide multiple values, a map of names to
+
+            values providing the credential'
+          type: object
+          additionalProperties:
+            type: string
+        scheme:
+          description: 'An HTTP authorization scheme, such as one registered with IANA
+
+            https://www.iana.org/assignments/http-authschemes/http-authschemes.xhtml'
+          type: string
+        value:
+          description: 'For authorization schemes that only provide a single value, such as
+
+            Basic, the single string value providing the credential'
+          type: string
     models.NodeMembershipState:
       type: object
       properties:
@@ -697,25 +1061,357 @@ components:
           - pending
           - approved
           - rejected
-    apimodels.ListNodesResponse:
+    models.JobHistory:
       type: object
       properties:
-        NextToken:
+        Event:
+          $ref: '#/components/schemas/models.Event'
+        ExecutionID:
           type: string
-        Nodes:
+        ExecutionState:
+          description: 'Deprecated: Left for backward compatibility with v1.4.x clients'
+          allOf:
+          - $ref: '#/components/schemas/models.StateChange-models_ExecutionStateType'
+        JobID:
+          type: string
+        JobState:
+          description: 'TODO: remove with v1.5
+
+            Deprecated: Left for backward compatibility with v1.4.x clients'
+          allOf:
+          - $ref: '#/components/schemas/models.StateChange-models_JobStateType'
+        JobVersion:
+          type: integer
+        SeqNum:
+          type: integer
+        Time:
+          type: string
+        Type:
+          $ref: '#/components/schemas/models.JobHistoryType'
+    models.TimeoutConfig:
+      type: object
+      properties:
+        ExecutionTimeout:
+          description: 'ExecutionTimeout is the maximum amount of time a task is allowed to run in seconds.
+
+            Zero means no timeout, such as for a daemon task.'
+          type: integer
+        QueueTimeout:
+          description: 'QueueTimeout is the maximum amount of time a task is allowed to wait in the orchestrator
+
+            queue in seconds before being scheduled. Zero means no timeout.'
+          type: integer
+        TotalTimeout:
+          description: 'TotalTimeout is the maximum amount of time a task is allowed to complete in seconds.
+
+            This includes the time spent in the queue, the time spent executing and the time spent retrying.
+
+            Zero means no timeout.'
+          type: integer
+    models.StateChange-models_ExecutionStateType:
+      type: object
+      properties:
+        New:
+          $ref: '#/components/schemas/models.ExecutionStateType'
+        Previous:
+          $ref: '#/components/schemas/models.ExecutionStateType'
+    models.Resources:
+      type: object
+      properties:
+        CPU:
+          description: CPU units
+          type: number
+        Disk:
+          description: Disk in bytes
+          type: integer
+        GPU:
+          description: GPU units
+          type: integer
+        GPUs:
+          description: GPU details
           type: array
           items:
-            $ref: '#/components/schemas/models.NodeState'
-    models.JobHistoryType:
-      type: integer
+            $ref: '#/components/schemas/models.GPU'
+        Memory:
+          description: Memory in bytes
+          type: integer
+    models.GPUVendor:
+      type: string
       enum:
-      - 0
-      - 1
-      - 2
+      - NVIDIA
+      - AMD/ATI
+      - Intel
       x-enum-varnames:
-      - JobHistoryTypeUndefined
-      - JobHistoryTypeJobLevel
-      - JobHistoryTypeExecutionLevel
+      - GPUVendorNvidia
+      - GPUVendorAMDATI
+      - GPUVendorIntel
+    models.Execution:
+      type: object
+      properties:
+        AllocatedResources:
+          description: AllocatedResources is the total resources allocated for the execution tasks.
+          allOf:
+          - $ref: '#/components/schemas/models.AllocatedResources'
+        ComputeState:
+          description: ComputeState observed state of the execution on the compute node
+          allOf:
+          - $ref: '#/components/schemas/models.State-models_ExecutionStateType'
+        CreateTime:
+          description: 'CreateTime is the time the execution has finished scheduling and been
+
+            verified by the plan applier.'
+          type: integer
+        DesiredState:
+          description: DesiredState of the execution on the compute node
+          allOf:
+          - $ref: '#/components/schemas/models.State-models_ExecutionDesiredStateType'
+        EvalID:
+          description: ID of the evaluation that generated this execution
+          type: string
+        FollowupEvalID:
+          description: 'FollowupEvalID captures a follow up evaluation created to handle a failed execution
+
+            that can be rescheduled in the future'
+          type: string
+        ID:
+          description: ID of the execution (UUID)
+          type: string
+        Job:
+          description: 'TODO: evaluate using a copy of the job instead of a pointer'
+          allOf:
+          - $ref: '#/components/schemas/models.Job'
+        JobID:
+          description: 'Job is the parent job of the task being allocated.
+
+            This is copied at execution time to avoid issues if the job
+
+            definition is updated.'
+          type: string
+        JobVersion:
+          description: JobVersion version of the job that this execution was created in
+          type: integer
+        ModifyTime:
+          description: ModifyTime is the time the execution was last updated.
+          type: integer
+        Name:
+          description: Name is a logical name of the execution.
+          type: string
+        Namespace:
+          description: Namespace is the namespace the execution is created in
+          type: string
+        NextExecution:
+          description: NextExecution is the execution that this execution is being replaced by
+          type: string
+        NodeID:
+          description: NodeID is the node this is being placed on
+          type: string
+        PartitionIndex:
+          description: 'PartitionIndex is the index of this execution in the job''s total partitions (0-based)
+
+            Only relevant when Job.Count > 1'
+          type: integer
+        PreviousExecution:
+          description: PreviousExecution is the execution that this execution is replacing
+          type: string
+        PublishedResult:
+          description: the published results for this execution
+          allOf:
+          - $ref: '#/components/schemas/models.SpecConfig'
+        Revision:
+          description: Revision is increment each time the execution is updated.
+          type: integer
+        RunOutput:
+          description: 'RunOutput is the output of the run command
+
+            TODO: evaluate removing this from execution spec in favour of calling `bacalhau job logs`'
+          allOf:
+          - $ref: '#/components/schemas/models.RunCommandResult'
+    apimodels.ListJobsResponse:
+      type: object
+      properties:
+        Items:
+          type: array
+          items:
+            $ref: '#/components/schemas/models.Job'
+        NextToken:
+          type: string
+    apimodels.PutNodeRequest:
+      type: object
+      properties:
+        Action:
+          type: string
+        Message:
+          type: string
+        NodeID:
+          type: string
+        credential:
+          $ref: '#/components/schemas/apimodels.HTTPCredential'
+        idempotencyToken:
+          type: string
+        namespace:
+          type: string
+    models.NodeInfo:
+      type: object
+      properties:
+        BacalhauVersion:
+          $ref: '#/components/schemas/models.BuildVersionInfo'
+        ComputeNodeInfo:
+          $ref: '#/components/schemas/models.ComputeNodeInfo'
+        Labels:
+          type: object
+          additionalProperties:
+            type: string
+        NodeID:
+          type: string
+        NodeType:
+          $ref: '#/components/schemas/models.NodeType'
+        SupportedProtocols:
+          description: SupportedProtocols indicates which communication protocols this node supports
+          type: array
+          items:
+            $ref: '#/components/schemas/models.Protocol'
+    models.Protocol:
+      type: string
+      enum:
+      - ncl/v1
+      - bprotocol/v2
+      x-enum-varnames:
+      - ProtocolNCLV1
+      - ProtocolBProtocolV2
+    apimodels.GetJobResponse:
+      type: object
+      properties:
+        Executions:
+          $ref: '#/components/schemas/apimodels.ListJobExecutionsResponse'
+        History:
+          $ref: '#/components/schemas/apimodels.ListJobHistoryResponse'
+        Job:
+          $ref: '#/components/schemas/models.Job'
+    apimodels.ListJobHistoryResponse:
+      type: object
+      properties:
+        Items:
+          type: array
+          items:
+            $ref: '#/components/schemas/models.JobHistory'
+        NextToken:
+          type: string
+    models.NodeState:
+      type: object
+      properties:
+        Connection:
+          description: 'Deprecated: Use ConnectionState.Status instead'
+          allOf:
+          - $ref: '#/components/schemas/models.NodeConnectionState'
+        ConnectionState:
+          description: Connection and messaging state
+          allOf:
+          - $ref: '#/components/schemas/models.ConnectionState'
+        Info:
+          description: Durable node information
+          allOf:
+          - $ref: '#/components/schemas/models.NodeInfo'
+        Membership:
+          $ref: '#/components/schemas/models.NodeMembershipState'
+    models.ConnectionState:
+      type: object
+      properties:
+        ConnectedSince:
+          description: Connection tracking
+          type: string
+        DisconnectedSince:
+          type: string
+        LastComputeSeqNum:
+          description: Message sequencing for reliable delivery
+          type: integer
+        LastError:
+          type: string
+        LastHeartbeat:
+          description: Last successful heartbeat timestamp
+          type: string
+        LastOrchestratorSeqNum:
+          description: Last seq received from orchestrator
+          type: integer
+        Status:
+          description: Connection status
+          allOf:
+          - $ref: '#/components/schemas/models.NodeConnectionState'
+    apimodels.DiffJobResponse:
+      type: object
+      properties:
+        Diff:
+          type: string
+        Warnings:
+          type: array
+          items:
+            type: string
+    models.LabelSelectorRequirement:
+      type: object
+      properties:
+        Key:
+          description: key is the label key that the selector applies to.
+          type: string
+        Operator:
+          description: 'operator represents a key''s relationship to a set of values.
+
+            Valid operators are In, NotIn, Exists and KeyNotInImap.'
+          allOf:
+          - $ref: '#/components/schemas/selection.Operator'
+        Values:
+          description: 'values is an array of string values. If the operator is In or NotIn,
+
+            the values array must be non-empty. If the operator is Exists or KeyNotInImap,
+
+            the values array must be empty. This array is replaced during a strategic'
+          type: array
+          items:
+            type: string
+    models.Task:
+      type: object
+      properties:
+        Engine:
+          $ref: '#/components/schemas/models.SpecConfig'
+        Env:
+          description: 'Map of environment variables to be used by the driver.
+
+            Values can be:
+
+            - Direct value: "debug-mode"
+
+            - Host env var: "env:HOST_VAR"'
+          type: object
+          additionalProperties:
+            type: string
+        InputSources:
+          description: 'InputSources is a list of remote artifacts to be downloaded before running the task
+
+            and mounted into the task.'
+          type: array
+          items:
+            $ref: '#/components/schemas/models.InputSource'
+        Meta:
+          description: Meta is used to associate arbitrary metadata with this task.
+          type: object
+          additionalProperties:
+            type: string
+        Name:
+          description: Name of the task
+          type: string
+        Network:
+          $ref: '#/components/schemas/models.NetworkConfig'
+        Publisher:
+          $ref: '#/components/schemas/models.SpecConfig'
+        Resources:
+          description: ResourcesConfig is the resources needed by this task
+          allOf:
+          - $ref: '#/components/schemas/models.ResourcesConfig'
+        ResultPaths:
+          description: ResultPaths is a list of task volumes to be included in the task's published result
+          type: array
+          items:
+            $ref: '#/components/schemas/models.ResultPath'
+        Timeouts:
+          $ref: '#/components/schemas/models.TimeoutConfig'
     models.Job:
       type: object
       properties:
@@ -800,133 +1496,17 @@ components:
 
             on each job specification update.'
           type: integer
-    models.Task:
+    apimodels.PutJobResponse:
       type: object
       properties:
-        Engine:
-          $ref: '#/components/schemas/models.SpecConfig'
-        Env:
-          description: 'Map of environment variables to be used by the driver.
-
-            Values can be:
-
-            - Direct value: "debug-mode"
-
-            - Host env var: "env:HOST_VAR"'
-          type: object
-          additionalProperties:
-            type: string
-        InputSources:
-          description: 'InputSources is a list of remote artifacts to be downloaded before running the task
-
-            and mounted into the task.'
-          type: array
-          items:
-            $ref: '#/components/schemas/models.InputSource'
-        Meta:
-          description: Meta is used to associate arbitrary metadata with this task.
-          type: object
-          additionalProperties:
-            type: string
-        Name:
-          description: Name of the task
+        EvaluationID:
           type: string
-        Network:
-          $ref: '#/components/schemas/models.NetworkConfig'
-        Publisher:
-          $ref: '#/components/schemas/models.SpecConfig'
-        Resources:
-          description: ResourcesConfig is the resources needed by this task
-          allOf:
-          - $ref: '#/components/schemas/models.ResourcesConfig'
-        ResultPaths:
-          description: ResultPaths is a list of task volumes to be included in the task's published result
-          type: array
-          items:
-            $ref: '#/components/schemas/models.ResultPath'
-        Timeouts:
-          $ref: '#/components/schemas/models.TimeoutConfig'
-    models.State-models_ExecutionStateType:
-      type: object
-      properties:
-        Details:
-          description: Details is a map of additional details about the state.
-          type: object
-          additionalProperties:
-            type: string
-        Message:
-          description: Message is a human readable message describing the state.
-          type: string
-        StateType:
-          description: StateType is the current state of the object.
-          allOf:
-          - $ref: '#/components/schemas/models.ExecutionStateType'
-    apimodels.DiffJobResponse:
-      type: object
-      properties:
-        Diff:
+        JobID:
           type: string
         Warnings:
           type: array
           items:
             type: string
-    models.State-models_JobStateType:
-      type: object
-      properties:
-        Details:
-          description: Details is a map of additional details about the state.
-          type: object
-          additionalProperties:
-            type: string
-        Message:
-          description: Message is a human readable message describing the state.
-          type: string
-        StateType:
-          description: StateType is the current state of the object.
-          allOf:
-          - $ref: '#/components/schemas/models.JobStateType'
-    models.ExecutionDesiredStateType:
-      type: integer
-      enum:
-      - 0
-      - 1
-      - 2
-      x-enum-varnames:
-      - ExecutionDesiredStatePending
-      - ExecutionDesiredStateRunning
-      - ExecutionDesiredStateStopped
-    models.ExecutionLog:
-      type: object
-      properties:
-        line:
-          type: string
-        type:
-          $ref: '#/components/schemas/models.ExecutionLogType'
-    models.TimeoutConfig:
-      type: object
-      properties:
-        ExecutionTimeout:
-          description: 'ExecutionTimeout is the maximum amount of time a task is allowed to run in seconds.
-
-            Zero means no timeout, such as for a daemon task.'
-          type: integer
-        QueueTimeout:
-          description: 'QueueTimeout is the maximum amount of time a task is allowed to wait in the orchestrator
-
-            queue in seconds before being scheduled. Zero means no timeout.'
-          type: integer
-        TotalTimeout:
-          description: 'TotalTimeout is the maximum amount of time a task is allowed to complete in seconds.
-
-            This includes the time spent in the queue, the time spent executing and the time spent retrying.
-
-            Zero means no timeout.'
-          type: integer
-    apimodels.StopJobResponse:
-      type: object
-      properties:
-        EvaluationID:
-          type: string
     apimodels.DiffJobRequest:
       type: object
       properties:
@@ -938,240 +1518,16 @@ components:
           type: string
         namespace:
           type: string
-    models.InputSource:
-      type: object
-      properties:
-        Alias:
-          description: 'Alias is an optional reference to this input source that can be used for
-
-            dynamic linking to this input. (e.g. dynamic import in wasm by alias)'
-          type: string
-        Source:
-          description: Source is the source of the artifact to be downloaded, e.g a URL, S3 bucket, etc.
-          allOf:
-          - $ref: '#/components/schemas/models.SpecConfig'
-        Target:
-          description: Target is the path where the artifact should be mounted on
-          type: string
-    models.AllocatedResources:
-      type: object
-      properties:
-        Tasks:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/models.Resources'
-    models.NodeType:
+    models.JobHistoryType:
       type: integer
       enum:
       - 0
       - 1
       - 2
       x-enum-varnames:
-      - nodeTypeUndefined
-      - NodeTypeRequester
-      - NodeTypeCompute
-    models.RunCommandResult:
-      type: object
-      properties:
-        ErrorMsg:
-          description: Runner error
-          type: string
-        ExitCode:
-          description: exit code of the run.
-          type: integer
-        StderrTruncated:
-          description: bool describing if stderr was truncated
-          type: boolean
-        Stdout:
-          description: stdout of the run. Yaml provided for `describe` output
-          type: string
-        StdoutTruncated:
-          description: bool describing if stdout was truncated
-          type: boolean
-        stderr:
-          description: stderr of the run.
-          type: string
-    models.ConnectionState:
-      type: object
-      properties:
-        ConnectedSince:
-          description: Connection tracking
-          type: string
-        DisconnectedSince:
-          type: string
-        LastComputeSeqNum:
-          description: Message sequencing for reliable delivery
-          type: integer
-        LastError:
-          type: string
-        LastHeartbeat:
-          description: Last successful heartbeat timestamp
-          type: string
-        LastOrchestratorSeqNum:
-          description: Last seq received from orchestrator
-          type: integer
-        Status:
-          description: Connection status
-          allOf:
-          - $ref: '#/components/schemas/models.NodeConnectionState'
-    apimodels.PutNodeRequest:
-      type: object
-      properties:
-        Action:
-          type: string
-        Message:
-          type: string
-        NodeID:
-          type: string
-        credential:
-          $ref: '#/components/schemas/apimodels.HTTPCredential'
-        idempotencyToken:
-          type: string
-        namespace:
-          type: string
-    models.Execution:
-      type: object
-      properties:
-        AllocatedResources:
-          description: AllocatedResources is the total resources allocated for the execution tasks.
-          allOf:
-          - $ref: '#/components/schemas/models.AllocatedResources'
-        ComputeState:
-          description: ComputeState observed state of the execution on the compute node
-          allOf:
-          - $ref: '#/components/schemas/models.State-models_ExecutionStateType'
-        CreateTime:
-          description: 'CreateTime is the time the execution has finished scheduling and been
-
-            verified by the plan applier.'
-          type: integer
-        DesiredState:
-          description: DesiredState of the execution on the compute node
-          allOf:
-          - $ref: '#/components/schemas/models.State-models_ExecutionDesiredStateType'
-        EvalID:
-          description: ID of the evaluation that generated this execution
-          type: string
-        FollowupEvalID:
-          description: 'FollowupEvalID captures a follow up evaluation created to handle a failed execution
-
-            that can be rescheduled in the future'
-          type: string
-        ID:
-          description: ID of the execution (UUID)
-          type: string
-        Job:
-          description: 'TODO: evaluate using a copy of the job instead of a pointer'
-          allOf:
-          - $ref: '#/components/schemas/models.Job'
-        JobID:
-          description: 'Job is the parent job of the task being allocated.
-
-            This is copied at execution time to avoid issues if the job
-
-            definition is updated.'
-          type: string
-        JobVersion:
-          description: JobVersion version of the job that this execution was created in
-          type: integer
-        ModifyTime:
-          description: ModifyTime is the time the execution was last updated.
-          type: integer
-        Name:
-          description: Name is a logical name of the execution.
-          type: string
-        Namespace:
-          description: Namespace is the namespace the execution is created in
-          type: string
-        NextExecution:
-          description: NextExecution is the execution that this execution is being replaced by
-          type: string
-        NodeID:
-          description: NodeID is the node this is being placed on
-          type: string
-        PartitionIndex:
-          description: 'PartitionIndex is the index of this execution in the job''s total partitions (0-based)
-
-            Only relevant when Job.Count > 1'
-          type: integer
-        PreviousExecution:
-          description: PreviousExecution is the execution that this execution is replacing
-          type: string
-        PublishedResult:
-          description: the published results for this execution
-          allOf:
-          - $ref: '#/components/schemas/models.SpecConfig'
-        Revision:
-          description: Revision is increment each time the execution is updated.
-          type: integer
-        RunOutput:
-          description: 'RunOutput is the output of the run command
-
-            TODO: evaluate removing this from execution spec in favour of calling `bacalhau job logs`'
-          allOf:
-          - $ref: '#/components/schemas/models.RunCommandResult'
-    selection.Operator:
-      type: string
-      enum:
-      - '!'
-      - '='
-      - ==
-      - in
-      - '!='
-      - notin
-      - exists
-      - gt
-      - lt
-      x-enum-varnames:
-      - DoesNotExist
-      - Equals
-      - DoubleEquals
-      - In
-      - NotEquals
-      - NotIn
-      - Exists
-      - GreaterThan
-      - LessThan
-    models.StateChange-models_JobStateType:
-      type: object
-      properties:
-        New:
-          $ref: '#/components/schemas/models.JobStateType'
-        Previous:
-          $ref: '#/components/schemas/models.JobStateType'
-    apimodels.ListJobHistoryResponse:
-      type: object
-      properties:
-        Items:
-          type: array
-          items:
-            $ref: '#/components/schemas/models.JobHistory'
-        NextToken:
-          type: string
-    apimodels.GetJobResponse:
-      type: object
-      properties:
-        Executions:
-          $ref: '#/components/schemas/apimodels.ListJobExecutionsResponse'
-        History:
-          $ref: '#/components/schemas/apimodels.ListJobHistoryResponse'
-        Job:
-          $ref: '#/components/schemas/models.Job'
-    models.State-models_ExecutionDesiredStateType:
-      type: object
-      properties:
-        Details:
-          description: Details is a map of additional details about the state.
-          type: object
-          additionalProperties:
-            type: string
-        Message:
-          description: Message is a human readable message describing the state.
-          type: string
-        StateType:
-          description: StateType is the current state of the object.
-          allOf:
-          - $ref: '#/components/schemas/models.ExecutionDesiredStateType'
+      - JobHistoryTypeUndefined
+      - JobHistoryTypeJobLevel
+      - JobHistoryTypeExecutionLevel
     models.NodeConnectionState:
       type: object
       properties:
@@ -1183,209 +1539,59 @@ components:
           x-enum-varnames:
           - connected
           - disconnected
-    models.JobHistory:
+    models.Port:
       type: object
       properties:
-        Event:
-          $ref: '#/components/schemas/models.Event'
-        ExecutionID:
-          type: string
-        ExecutionState:
-          description: 'Deprecated: Left for backward compatibility with v1.4.x clients'
-          allOf:
-          - $ref: '#/components/schemas/models.StateChange-models_ExecutionStateType'
-        JobID:
-          type: string
-        JobState:
-          description: 'TODO: remove with v1.5
+        HostNetwork:
+          description: 'HostNetwork specifies which network interface to bind to.
 
-            Deprecated: Left for backward compatibility with v1.4.x clients'
-          allOf:
-          - $ref: '#/components/schemas/models.StateChange-models_JobStateType'
-        JobVersion:
-          type: integer
-        SeqNum:
-          type: integer
-        Time:
-          type: string
-        Type:
-          $ref: '#/components/schemas/models.JobHistoryType'
-    models.GPU:
-      type: object
-      properties:
-        index:
-          description: Self-reported index of the device in the system
-          type: integer
-          format: int64
-        memory:
-          description: Total GPU memory in mebibytes (MiB)
-          type: integer
-          format: int64
-        name:
-          description: Model name of the GPU e.g. Tesla T4
-          type: string
-        pciaddress:
-          description: 'PCI address of the device, in the format AAAA:BB:CC.C
+            If empty, defaults to "0.0.0.0" (all interfaces).
 
-            Used to discover the correct device rendering cards'
+            Can be set to "127.0.0.1" to only allow local connections.'
           type: string
-        vendor:
-          description: Maker of the GPU, e.g. NVidia, AMD, Intel
-          allOf:
-          - $ref: '#/components/schemas/models.GPUVendor'
-    models.Event:
-      type: object
-      properties:
-        Details:
-          description: 'Any additional metadata that the system or user may need to know about
-
-            the event in order to handle it properly.'
-          type: object
-          additionalProperties:
-            type: string
-        Message:
-          description: 'A human-readable string giving the user all the information they need to
-
-            understand and respond to an Event, if a response is required.'
-          type: string
-        Timestamp:
-          description: 'The moment the event occurred, which may be different to the moment it
-
-            was recorded.'
-          type: string
-        Topic:
-          description: The topic of the event. See the documentation on EventTopic.
-          type: string
-    apimodels.PutNodeResponse:
-      type: object
-      properties:
-        Error:
-          type: string
-        Success:
-          type: boolean
-    models.GPUVendor:
-      type: string
-      enum:
-      - NVIDIA
-      - AMD/ATI
-      - Intel
-      x-enum-varnames:
-      - GPUVendorNvidia
-      - GPUVendorAMDATI
-      - GPUVendorIntel
-    models.SpecConfig:
-      type: object
-      properties:
-        Params:
-          description: Params is a map of the config params
-          type: object
-          additionalProperties: true
-        Type:
-          description: Type of the config
-          type: string
-    apimodels.RerunJobRequest:
-      type: object
-      properties:
-        JobVersion:
-          type: integer
-        Reason:
-          type: string
-        credential:
-          $ref: '#/components/schemas/apimodels.HTTPCredential'
-        idempotencyToken:
-          type: string
-        namespace:
-          type: string
-    models.ExecutionStateType:
-      type: integer
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      - 9
-      - 10
-      - 11
-      x-enum-comments:
-        ExecutionStateBidAccepted: aka running
-      x-enum-descriptions:
-      - ''
-      - ''
-      - ''
-      - ''
-      - ''
-      - aka running
-      - ''
-      - ''
-      - ''
-      - ''
-      - ''
-      - ''
-      x-enum-varnames:
-      - ExecutionStateUndefined
-      - ExecutionStateNew
-      - ExecutionStateAskForBid
-      - ExecutionStateAskForBidAccepted
-      - ExecutionStateAskForBidRejected
-      - ExecutionStateBidAccepted
-      - ExecutionStateRunning
-      - ExecutionStatePublishing
-      - ExecutionStateBidRejected
-      - ExecutionStateCompleted
-      - ExecutionStateFailed
-      - ExecutionStateCancelled
-    apimodels.RerunJobResponse:
-      type: object
-      properties:
-        EvaluationID:
-          type: string
-        JobID:
-          type: string
-        JobVersion:
-          type: integer
-        Warnings:
-          type: array
-          items:
-            type: string
-    models.StateChange-models_ExecutionStateType:
-      type: object
-      properties:
-        New:
-          $ref: '#/components/schemas/models.ExecutionStateType'
-        Previous:
-          $ref: '#/components/schemas/models.ExecutionStateType'
-    models.ResultPath:
-      type: object
-      properties:
         Name:
-          description: Name
+          description: 'Name is a required identifier for this port mapping.
+
+            It will be used to create environment variables to inform the task
+
+            about its allocated ports.'
           type: string
-        Path:
-          description: The path to the file/dir
-          type: string
-    models.NetworkConfig:
+        Static:
+          description: 'Static is the host port to use. If not specified, a port will be
+
+            auto-allocated from the compute node''s port range'
+          type: integer
+        Target:
+          description: 'Target is the port inside the task/container that should be exposed.
+
+            Only valid for Bridge network mode. If not specified in Bridge mode,
+
+            it will default to the same value as the host port.'
+          type: integer
+    models.BuildVersionInfo:
       type: object
       properties:
-        Domains:
-          type: array
-          items:
-            type: string
-        Ports:
-          type: array
-          items:
-            $ref: '#/components/schemas/models.Port'
-        Type:
-          $ref: '#/components/schemas/models.Network'
-    apimodels.GetNodeResponse:
-      type: object
-      properties:
-        Node:
-          $ref: '#/components/schemas/models.NodeState'
+        BuildDate:
+          type: string
+          example: '2022-11-16T14:03:31Z'
+        GOARCH:
+          type: string
+          example: amd64
+        GOOS:
+          type: string
+          example: linux
+        GitCommit:
+          type: string
+          example: d612b63108f2b5ce1ab2b9e02444eb1dac1d922d
+        GitVersion:
+          type: string
+          example: v0.3.12
+        Major:
+          type: string
+          example: '0'
+        Minor:
+          type: string
+          example: '3'
     models.ComputeNodeInfo:
       type: object
       properties:
@@ -1418,254 +1624,48 @@ components:
 
             Format: IPv4 or hostname (e.g., "192.168.1.100" or "node1.example.com")'
           type: string
-    apimodels.PutJobRequest:
+    apimodels.PutNodeResponse:
       type: object
       properties:
-        Force:
+        Error:
+          type: string
+        Success:
           type: boolean
-        Job:
-          $ref: '#/components/schemas/models.Job'
-        credential:
-          $ref: '#/components/schemas/apimodels.HTTPCredential'
-        idempotencyToken:
-          type: string
-        namespace:
-          type: string
-    models.Resources:
+    models.Event:
       type: object
       properties:
-        CPU:
-          description: CPU units
-          type: number
-        Disk:
-          description: Disk in bytes
-          type: integer
-        GPU:
-          description: GPU units
-          type: integer
-        GPUs:
-          description: GPU details
-          type: array
-          items:
-            $ref: '#/components/schemas/models.GPU'
-        Memory:
-          description: Memory in bytes
-          type: integer
-    apimodels.PutJobResponse:
-      type: object
-      properties:
-        EvaluationID:
-          type: string
-        JobID:
-          type: string
-        Warnings:
-          type: array
-          items:
-            type: string
-    apimodels.ListJobResultsResponse:
-      type: object
-      properties:
-        Items:
-          type: array
-          items:
-            $ref: '#/components/schemas/models.SpecConfig'
-        NextToken:
-          type: string
-    models.BuildVersionInfo:
-      type: object
-      properties:
-        BuildDate:
-          type: string
-          example: '2022-11-16T14:03:31Z'
-        GOARCH:
-          type: string
-          example: amd64
-        GOOS:
-          type: string
-          example: linux
-        GitCommit:
-          type: string
-          example: d612b63108f2b5ce1ab2b9e02444eb1dac1d922d
-        GitVersion:
-          type: string
-          example: v0.3.12
-        Major:
-          type: string
-          example: '0'
-        Minor:
-          type: string
-          example: '3'
-    models.Port:
-      type: object
-      properties:
-        HostNetwork:
-          description: 'HostNetwork specifies which network interface to bind to.
+        Details:
+          description: 'Any additional metadata that the system or user may need to know about
 
-            If empty, defaults to "0.0.0.0" (all interfaces).
-
-            Can be set to "127.0.0.1" to only allow local connections.'
-          type: string
-        Name:
-          description: 'Name is a required identifier for this port mapping.
-
-            It will be used to create environment variables to inform the task
-
-            about its allocated ports.'
-          type: string
-        Static:
-          description: 'Static is the host port to use. If not specified, a port will be
-
-            auto-allocated from the compute node''s port range'
-          type: integer
-        Target:
-          description: 'Target is the port inside the task/container that should be exposed.
-
-            Only valid for Bridge network mode. If not specified in Bridge mode,
-
-            it will default to the same value as the host port.'
-          type: integer
-    models.NodeState:
-      type: object
-      properties:
-        Connection:
-          description: 'Deprecated: Use ConnectionState.Status instead'
-          allOf:
-          - $ref: '#/components/schemas/models.NodeConnectionState'
-        ConnectionState:
-          description: Connection and messaging state
-          allOf:
-          - $ref: '#/components/schemas/models.ConnectionState'
-        Info:
-          description: Durable node information
-          allOf:
-          - $ref: '#/components/schemas/models.NodeInfo'
-        Membership:
-          $ref: '#/components/schemas/models.NodeMembershipState'
-    models.ExecutionLogType:
-      type: integer
-      enum:
-      - 0
-      - 1
-      - 2
-      x-enum-varnames:
-      - executionLogTypeUnknown
-      - ExecutionLogTypeSTDOUT
-      - ExecutionLogTypeSTDERR
-    apimodels.HTTPCredential:
-      type: object
-      properties:
-        params:
-          description: 'For authorization schemes that provide multiple values, a map of names to
-
-            values providing the credential'
+            the event in order to handle it properly.'
           type: object
           additionalProperties:
             type: string
-        scheme:
-          description: 'An HTTP authorization scheme, such as one registered with IANA
+        Message:
+          description: 'A human-readable string giving the user all the information they need to
 
-            https://www.iana.org/assignments/http-authschemes/http-authschemes.xhtml'
+            understand and respond to an Event, if a response is required.'
           type: string
-        value:
-          description: 'For authorization schemes that only provide a single value, such as
+        Timestamp:
+          description: 'The moment the event occurred, which may be different to the moment it
 
-            Basic, the single string value providing the credential'
+            was recorded.'
           type: string
-    apimodels.ListJobExecutionsResponse:
+        Topic:
+          description: The topic of the event. See the documentation on EventTopic.
+          type: string
+    models.State-models_ExecutionStateType:
       type: object
       properties:
-        Items:
-          type: array
-          items:
-            $ref: '#/components/schemas/models.Execution'
-        NextToken:
-          type: string
-    models.ResourcesConfig:
-      type: object
-      properties:
-        CPU:
-          description: CPU https://github.com/BTBurke/k8sresource string
-          type: string
-        Disk:
-          description: Memory github.com/dustin/go-humanize string
-          type: string
-        GPU:
-          type: string
-        Memory:
-          description: Memory github.com/dustin/go-humanize string
-          type: string
-    models.LabelSelectorRequirement:
-      type: object
-      properties:
-        Key:
-          description: key is the label key that the selector applies to.
-          type: string
-        Operator:
-          description: 'operator represents a key''s relationship to a set of values.
-
-            Valid operators are In, NotIn, Exists and KeyNotInImap.'
-          allOf:
-          - $ref: '#/components/schemas/selection.Operator'
-        Values:
-          description: 'values is an array of string values. If the operator is In or NotIn,
-
-            the values array must be non-empty. If the operator is Exists or KeyNotInImap,
-
-            the values array must be empty. This array is replaced during a strategic'
-          type: array
-          items:
-            type: string
-    apimodels.ListJobsResponse:
-      type: object
-      properties:
-        Items:
-          type: array
-          items:
-            $ref: '#/components/schemas/models.Job'
-        NextToken:
-          type: string
-    apimodels.ListJobVersionsResponse:
-      type: object
-      properties:
-        Items:
-          type: array
-          items:
-            $ref: '#/components/schemas/models.Job'
-        NextToken:
-          type: string
-    models.NodeInfo:
-      type: object
-      properties:
-        BacalhauVersion:
-          $ref: '#/components/schemas/models.BuildVersionInfo'
-        ComputeNodeInfo:
-          $ref: '#/components/schemas/models.ComputeNodeInfo'
-        Labels:
+        Details:
+          description: Details is a map of additional details about the state.
           type: object
           additionalProperties:
             type: string
-        NodeID:
+        Message:
+          description: Message is a human readable message describing the state.
           type: string
-        NodeType:
-          $ref: '#/components/schemas/models.NodeType'
-        SupportedProtocols:
-          description: SupportedProtocols indicates which communication protocols this node supports
-          type: array
-          items:
-            $ref: '#/components/schemas/models.Protocol'
-    models.Network:
-      type: integer
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      x-enum-varnames:
-      - NetworkDefault
-      - NetworkNone
-      - NetworkHost
-      - NetworkFull
-      - NetworkHTTP
-      - NetworkBridge
+        StateType:
+          description: StateType is the current state of the object.
+          allOf:
+          - $ref: '#/components/schemas/models.ExecutionStateType'
