@@ -45,6 +45,9 @@ specificationVersion: '0.23'
 image: https://expanso.io/favicon.ico
 created: '2026-07-17'
 modified: '2026-07-19'
+x-docs-platform: docusaurus
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-10-03
 tags:
 - Company
 - Distributed Computing
