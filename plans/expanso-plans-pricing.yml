@@ -1,0 +1,69 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://expanso.io/pricing/
+sources:
+- https://expanso.io/pricing/
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T104522
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: usage-other
+delivery:
+  delivery: managed+licensed
+  method: page
+  read: '2026-10-07'
+  evidence: Any device running the Expanso agent - remote locations, on-prem servers, cloud instances,
+    or IoT devices.
+  managed_tier: Pro
+published: true
+note: 'Per-node pricing with free tier, Pro per node/month, custom Enterprise, and two fixed-price pilot
+  packages. FAQ: "Pro: $50 per active node per month"; volume discounts for 500+ nodes via Enterprise.'
+plan_count: 6
+currency: USD
+plans:
+- name: Free
+  price_text: $0 forever
+  price: 0
+  currency: USD
+  period: month
+  unit: node
+  included_quota: Up to 5 nodes, community support, self-service onboarding, standard documentation, no
+    volume charges
+- name: Pro
+  price_text: $50 per node/month
+  price: 50
+  currency: USD
+  period: month
+  unit: node
+  included_quota: Everything in Free, unlimited nodes, email support, service terms by agreement, priority
+    queueing
+- name: Enterprise
+  price_text: Custom volume discounts
+  period: none
+  included_quota: Everything in Pro, volume discounts, dedicated success engineer, custom SLAs, training
+- name: Starter Package (pilot)
+  price_text: $1,000 one-time / 30 days
+  price: 1000
+  currency: USD
+  period: one-time
+  unit: up to 10 nodes for 30 days
+  included_quota: Data assessment, guided deployment, email + Slack support
+- name: Accelerator Package (pilot)
+  price_text: $15,000 one-time / 180 days
+  price: 15000
+  currency: USD
+  period: one-time
+  unit: up to 25 nodes for 180 days
+  included_quota: 30-day data audit, dedicated success engineer, 2 custom processors, priority support
+    terms
+- name: Non-commercial use
+  price_text: Free for non-commercial use
+  period: none
+  unit: up to 10 nodes
+  included_quota: The full engine, up to 10 nodes, free forever
+rate_limit_statements:
+- Up to 5 nodes included
+- Up to 10 nodes
+- Up to 25 nodes
