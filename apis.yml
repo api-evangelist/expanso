@@ -119,6 +119,8 @@ apis:
   - type: AgenticAccess
     url: agentic-access/expanso-agentic-access.yml
 common:
+- type: Plans
+  url: plans/expanso-plans-pricing.yml
 - url: https://expanso.io/blog/rss.xml
   type: BlogRSS
 - type: Website
